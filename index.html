@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0d1b2a">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%230d1b2a%27/%3E%3Ctext x=%2732%27 y=%2744%27 text-anchor=%27middle%27 font-size=%2740%27 fill=%27%23e3ca90%27 font-family=%27Georgia%27%3ED%3C/text%3E%3C/svg%3E">
+  <title>Diplomaker — Creador de diplomas y certificados</title>
+  <link rel="stylesheet" href="styles/app.css">
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <aside class="sidebar" aria-label="Navegación principal">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">D</div>
+        <div>
+          <div class="brand-name">Diplomaker</div>
+          <div class="brand-version">2.0 · Beta pública 0.1</div>
+        </div>
+      </div>
+
+      <nav class="nav-list" id="mainNav">
+        <button class="nav-item active" data-view="home"><span>⌂</span> Inicio</button>
+        <button class="nav-item" data-view="create"><span>＋</span> Crear</button>
+        <button class="nav-item" data-view="data"><span>▦</span> Datos</button>
+        <button class="nav-item" data-view="review"><span>✓</span> Revisión</button>
+        <button class="nav-item" data-view="export"><span>⇩</span> Exportar</button>
+        <button class="nav-item" data-view="templates"><span>◇</span> Plantillas</button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <button class="secondary-button full" id="openProjectButton">Abrir proyecto</button>
+        <button class="ghost-button full" id="saveProjectButton">Guardar proyecto</button>
+        <input type="file" id="projectFileInput" accept=".json,.diplomaker" hidden>
+        <div class="offline-badge"><span></span> Funcionamiento local</div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div>
+          <div class="eyebrow" id="viewEyebrow">PROYECTO NUEVO</div>
+          <h1 id="viewTitle">Creador de diplomas y certificados</h1>
+        </div>
+        <div class="topbar-actions">
+          <div class="autosave" id="autosaveStatus">Sin cambios pendientes</div>
+          <button class="icon-button" id="helpButton" aria-label="Ayuda">?</button>
+        </div>
+      </header>
+
+      <section class="view active" id="view-home" data-view-panel="home">
+        <div class="hero-card">
+          <div class="hero-copy">
+            <div class="hero-kicker">CREACIÓN LOCAL</div>
+            <h2>Creá certificados individuales o lotes completos, sin pasos innecesarios.</h2>
+            <p>Cargá una persona o una planilla, revisá cada resultado y exportá PDF, PNG o ZIP directamente desde el navegador.</p>
+          </div>
+          <div class="hero-status">
+            <div class="status-number" id="homeRecordCount">0</div>
+            <div class="status-label">certificados en el proyecto</div>
+          </div>
+        </div>
+
+        <div class="action-grid">
+          <button class="action-card" data-start-mode="individual">
+            <span class="action-icon">A</span>
+            <strong>Certificado individual</strong>
+            <small>Completá un formulario y exportá un certificado puntual.</small>
+          </button>
+          <button class="action-card" data-start-mode="batch">
+            <span class="action-icon">▦</span>
+            <strong>Lote desde Excel</strong>
+            <small>Abrí XLSX o CSV, asociá columnas y generá el lote.</small>
+          </button>
+          <button class="action-card" data-view-target="templates">
+            <span class="action-icon">◇</span>
+            <strong>Biblioteca de plantillas</strong>
+            <small>Elegí entre los diseños clásico, moderno y académico.</small>
+          </button>
+        </div>
+
+        <div class="section-header compact">
+          <div>
+            <div class="eyebrow">CONTINUIDAD</div>
+            <h3>Estado del proyecto</h3>
+          </div>
+        </div>
+        <div class="metrics-grid">
+          <div class="metric-card"><span>Plantilla activa</span><strong id="metricTemplate">Sin seleccionar</strong></div>
+          <div class="metric-card"><span>Registros listos</span><strong id="metricReady">0</strong></div>
+          <div class="metric-card"><span>Advertencias</span><strong id="metricWarnings">0</strong></div>
+          <div class="metric-card"><span>Errores</span><strong id="metricErrors">0</strong></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-create" data-view-panel="create">
+        <div class="section-header">
+          <div>
+            <div class="eyebrow">PASO 1</div>
+            <h2>Elegí cómo vas a crear los certificados</h2>
+            <p>Podés cambiar entre modo individual y lote sin perder el proyecto.</p>
+          </div>
+          <div class="segmented" id="modeSelector">
+            <button data-mode="individual" class="active">Individual</button>
+            <button data-mode="batch">Lote</button>
+          </div>
+        </div>
+
+        <div class="workspace-grid create-grid">
+          <div class="panel">
+            <div class="panel-title-row">
+              <h3>Plantilla</h3>
+              <span class="pill" id="activeTemplatePill">No seleccionada</span>
+            </div>
+            <div class="template-mini-grid" id="templateChooser"></div>
+          </div>
+
+          <div class="panel" id="individualFormPanel">
+            <div class="panel-title-row">
+              <h3>Datos del certificado</h3>
+              <span class="pill subtle">Edición directa</span>
+            </div>
+            <form id="individualForm" class="form-grid" autocomplete="off">
+              <label class="field span-4">Tratamiento
+                <select name="treatment">
+                  <option value="">Sin tratamiento</option>
+                  <option>Sr.</option><option>Sra.</option><option>Dr.</option><option>Dra.</option>
+                  <option>Alumno</option><option>Alumna</option>
+                </select>
+              </label>
+              <label class="field span-8">Nombre y apellido
+                <input name="participantName" placeholder="Ej.: Valentina Serra" required>
+              </label>
+              <label class="field span-4">Tipo
+                <select name="certificateType">
+                  <option>ASISTENCIA</option><option>PARTICIPACIÓN</option><option>MODERACIÓN</option>
+                  <option>PANELISTA</option><option>DISERTANTE</option>
+                </select>
+              </label>
+              <label class="field span-8">Actividad o evento
+                <input name="eventTitle" placeholder="Nombre de la jornada o curso">
+              </label>
+              <label class="field span-4">Fecha
+                <input name="eventDate" type="date">
+              </label>
+              <label class="field span-12">Texto del certificado
+                <textarea name="eventText" rows="4" placeholder="Descripción que aparecerá en el certificado"></textarea>
+              </label>
+            </form>
+
+            <div class="panel-title-row top-gap">
+              <h3>Firmantes</h3>
+              <button class="ghost-button small" id="addSignerButton" type="button">＋ Agregar</button>
+            </div>
+            <div id="signersEditor" class="signers-editor"></div>
+            <div class="form-actions">
+              <button class="primary-button" id="applyIndividualButton" type="button">Aplicar y revisar</button>
+            </div>
+          </div>
+
+          <div class="panel hidden" id="batchImportPanel">
+            <div class="panel-title-row">
+              <h3>Archivo de datos</h3>
+              <span class="pill subtle">XLSX · CSV</span>
+            </div>
+            <label class="dropzone" id="dataDropzone">
+              <input type="file" id="dataFileInput" accept=".xlsx,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden>
+              <span class="dropzone-icon">⇧</span>
+              <strong>Soltá el archivo o hacé clic para buscarlo</strong>
+              <small>El archivo se procesa en esta computadora. No se envía a internet.</small>
+            </label>
+            <div id="importSummary" class="import-summary hidden"></div>
+            <div id="sheetChooserWrap" class="field top-gap hidden">
+              <label for="sheetChooser">Hoja de cálculo</label>
+              <select id="sheetChooser"></select>
+            </div>
+            <div class="form-actions">
+              <button class="primary-button" id="continueMappingButton" disabled>Continuar con la asociación</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-data" data-view-panel="data">
+        <div class="section-header">
+          <div>
+            <div class="eyebrow">PASO 2</div>
+            <h2>Asociación de columnas</h2>
+            <p>Diplomaker propone las coincidencias. Confirmalas o corregilas una sola vez.</p>
+          </div>
+          <span class="pill" id="mappingFilePill">Sin archivo</span>
+        </div>
+        <div class="panel" id="mappingEmptyState">
+          <div class="empty-state">
+            <span>▦</span>
+            <h3>Todavía no cargaste una planilla</h3>
+            <p>Volvé a Crear, elegí “Lote” y abrí un archivo XLSX o CSV.</p>
+            <button class="secondary-button" data-view-target="create">Ir a Crear</button>
+          </div>
+        </div>
+        <div class="workspace-grid mapping-layout hidden" id="mappingWorkspace">
+          <div class="panel">
+            <div class="panel-title-row"><h3>Campos esenciales</h3><span class="pill subtle">Automático</span></div>
+            <div id="mappingFields" class="mapping-fields"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-title-row"><h3>Vista de la planilla</h3><span class="pill subtle" id="mappingRowsPill">0 filas</span></div>
+            <div class="table-wrap"><table class="data-table" id="sourcePreviewTable"></table></div>
+            <div class="form-actions">
+              <button class="primary-button" id="buildRecordsButton">Crear registros</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-review" data-view-panel="review">
+        <div class="section-header">
+          <div>
+            <div class="eyebrow">PASO 3</div>
+            <h2>Revisión antes de emitir</h2>
+            <p>Seleccioná una fila para comprobar exactamente cómo quedará.</p>
+          </div>
+          <div class="review-filters" id="reviewFilters">
+            <button class="filter-chip active" data-filter="all">Todos <b id="countAll">0</b></button>
+            <button class="filter-chip" data-filter="ready">Listos <b id="countReady">0</b></button>
+            <button class="filter-chip" data-filter="warning">Advertencias <b id="countWarning">0</b></button>
+            <button class="filter-chip" data-filter="error">Errores <b id="countError">0</b></button>
+          </div>
+        </div>
+        <div class="review-layout">
+          <div class="panel records-panel">
+            <div class="table-wrap tall"><table class="data-table records-table" id="recordsTable"></table></div>
+          </div>
+          <div class="panel preview-panel">
+            <div class="panel-title-row">
+              <div>
+                <h3 id="previewRecordName">Sin registro seleccionado</h3>
+                <small id="previewRecordMeta">Elegí una fila para verla.</small>
+              </div>
+              <div class="preview-actions">
+                <button class="secondary-button small" id="editRecordButton">Editar</button>
+                <button class="ghost-button small" id="prevRecordButton">←</button>
+                <button class="ghost-button small" id="nextRecordButton">→</button>
+              </div>
+            </div>
+            <div class="canvas-stage" id="canvasStage">
+              <canvas id="certificateCanvas" width="1120" height="792" aria-label="Vista previa del certificado"></canvas>
+              <div class="canvas-placeholder" id="canvasPlaceholder">La vista previa aparecerá aquí.</div>
+            </div>
+            <div id="validationList" class="validation-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-export" data-view-panel="export">
+        <div class="section-header">
+          <div>
+            <div class="eyebrow">PASO 4</div>
+            <h2>Exportación directa</h2>
+            <p>El PDF se genera con el mismo motor de la vista previa.</p>
+          </div>
+          <span class="pill" id="exportCountPill">0 certificados</span>
+        </div>
+        <div class="export-grid">
+          <button class="export-card" id="exportCurrentPdfButton">
+            <span>PDF</span><strong>Certificado actual</strong><small>Un archivo PDF listo para enviar.</small>
+          </button>
+          <button class="export-card" id="exportCombinedPdfButton">
+            <span>PDF+</span><strong>PDF conjunto</strong><small>Un solo documento con todo el lote.</small>
+          </button>
+          <button class="export-card" id="exportZipButton">
+            <span>ZIP</span><strong>PDFs individuales</strong><small>Un PDF por participante dentro de un ZIP.</small>
+          </button>
+          <button class="export-card" id="exportCurrentPngButton">
+            <span>PNG</span><strong>Imagen actual</strong><small>Imagen de alta resolución.</small>
+          </button>
+          <button class="export-card" id="exportReportButton">
+            <span>CSV</span><strong>Informe de emisión</strong><small>Estado, advertencias y nombre de archivo.</small>
+          </button>
+        </div>
+        <div class="panel top-gap">
+          <div class="panel-title-row"><h3>Reglas de nombre</h3><span class="pill subtle">Editable</span></div>
+          <label class="field">Patrón de archivo
+            <input id="filenamePattern" value="{NOMBRE}">
+          </label>
+          <p class="muted-text">Variables: {ID_ARCHIVO}, {NOMBRE}, {APELLIDO_NOMBRE}, {TIPO_CERTIFICADO}, {EVENTO}, {FECHA}</p>
+        </div>
+      </section>
+
+      <section class="view" id="view-templates" data-view-panel="templates">
+        <div class="section-header">
+          <div>
+            <div class="eyebrow">BIBLIOTECA</div>
+            <h2>Plantillas generales</h2>
+            <p>Tres diseños neutros, sin marcas ni identidades de terceros.</p>
+          </div>
+          <span class="pill">3 integradas</span>
+        </div>
+        <div class="template-library" id="templateLibrary"></div>
+        <div class="panel top-gap roadmap-panel">
+          <div>
+            <div class="eyebrow">PRÓXIMO SPRINT</div>
+            <h3>Estudio visual de plantillas</h3>
+            <p>El editor por capas, logos dinámicos, firmas gráficas y campos arrastrables se incorporará sobre este mismo motor de composición.</p>
+          </div>
+          <span class="roadmap-tag">En desarrollo</span>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast-region" id="toastRegion" aria-live="polite"></div>
+
+  <dialog id="editRecordDialog" class="modal edit-modal">
+    <div class="modal-header"><h2>Editar certificado</h2><button class="icon-button" data-close-dialog>×</button></div>
+    <form id="editRecordForm" class="modal-body form-grid" method="dialog">
+      <label class="field span-4">Tratamiento<input name="treatment"></label>
+      <label class="field span-8">Nombre y apellido<input name="participantName" required></label>
+      <label class="field span-4">Tipo<input name="certificateType"></label>
+      <label class="field span-8">Evento<input name="eventTitle"></label>
+      <label class="field span-4">Fecha<input name="eventDate"></label>
+      <label class="field span-8">Plantilla<select name="templateId"></select></label>
+      <label class="field span-12">Texto del certificado<textarea name="eventText" rows="3"></textarea></label>
+      <div class="span-12"><div class="panel-title-row"><h3>Firmantes</h3><button type="button" class="ghost-button small" id="editAddSignerButton">＋ Agregar</button></div><div id="editSignersEditor" class="signers-editor"></div></div>
+      <div class="form-actions span-12"><button type="button" class="ghost-button" data-close-dialog>Cancelar</button><button type="submit" class="primary-button">Guardar cambios</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="helpDialog" class="modal">
+    <div class="modal-header"><h2>Guía rápida</h2><button class="icon-button" data-close-dialog>×</button></div>
+    <ol class="help-steps">
+      <li>Elegí una plantilla.</li>
+      <li>Completá una persona o cargá Excel/CSV.</li>
+      <li>Revisá advertencias y desbordamientos.</li>
+      <li>Exportá PDF, PNG, ZIP o informe.</li>
+    </ol>
+    <p>Todo el procesamiento se realiza localmente. La aplicación no envía los datos de las planillas a un servidor.</p><p class="muted-text">Diplomaker 2.0 · Beta pública 0.1 · 19/08/2026 · Ariel Marcelo Gómez</p>
+  </dialog>
+
+  <script src="vendor/jszip.min.js"></script>
+  <script src="src/utils.js"></script>
+  <script src="src/csv-reader.js"></script>
+  <script src="src/xlsx-reader.js"></script>
+  <script src="src/embedded-assets.js"></script>
+  <script src="src/templates.js"></script>
+  <script src="src/renderer.js"></script>
+  <script src="src/pdf-writer.js"></script>
+  <script src="src/storage.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+PLANTILLA;TRATAMIENTO;NOMBRE_APELLIDO;TIPO_CERTIFICADO;EVENTO;FECHA;TEXTO_CERTIFICADO;ID_ARCHIVO;FIRMANTE_1_NOMBRE;FIRMANTE_1_CARGO;FIRMANTE_2_NOMBRE;FIRMANTE_2_CARGO
+CLASICO;Sra.;Sofía Martínez;ASISTENCIA;Taller de herramientas digitales;15/08/2026;;sofia_martinez;Andrea Molina;Coordinadora académica;;
+MODERNO;Sr.;Tomás Vega;PARTICIPACIÓN;Seminario de comunicación efectiva;16/08/2026;;tomas_vega;Diego Herrera;Director del programa;Laura Campos;Responsable de formación
+ACADEMICO;Dra.;Lucía Fernández;APROBACIÓN;Curso introductorio de gestión de proyectos;17/08/2026;En reconocimiento por haber completado satisfactoriamente el curso introductorio de gestión de proyectos.;lucia_fernandez;Marina López;Docente responsable;Pablo Ríos;Coordinador general
+CLASICO;;Alex Rivera;DISERTANTE;Encuentro abierto de innovación;18/08/2026;;alex_rivera;Valeria Soto;Organizadora del encuentro;;

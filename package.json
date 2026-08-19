@@ -1,0 +1,1 @@
+{"name":"diplomaker","version":"2.0.0-beta.1","private":false,"description":"Creador local y de código abierto de diplomas y certificados","license":"MIT","scripts":{"serve":"node tools/server.js","check":"node tools/static-check.js"},"engines":{"node":">=18"}}
