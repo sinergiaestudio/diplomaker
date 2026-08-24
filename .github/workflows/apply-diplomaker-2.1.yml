@@ -1,0 +1,74 @@
+name: Aplicar Diplomaker 2.1
+
+on:
+  push:
+    branches: ["main"]
+    paths: [".github/workflows/apply-diplomaker-2.1.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: diplomaker-2-1-release
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obtener repositorio
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Preparar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Aplicar paquete 2.1 y verificarlo
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat .github/dm21/part-* > /tmp/diplomaker-2.1.zip.b64
+          base64 --decode /tmp/diplomaker-2.1.zip.b64 > /tmp/diplomaker-2.1.zip
+          echo "7e86c56f74f4b004a148c5b1286f96154a538155000a1e9c4d62a35e3b29852b  /tmp/diplomaker-2.1.zip" | sha256sum --check --strict
+          unzip -o /tmp/diplomaker-2.1.zip -d .
+          rm -rf .github/dm21
+          rm -f .github/workflows/apply-diplomaker-2.1.yml
+          npm run check
+
+      - name: Confirmar Diplomaker 2.1 en main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No había cambios pendientes."
+          else
+            git commit -m "Publicar Diplomaker 2.1 con Estudio de Plantillas"
+            git push origin HEAD:main
+          fi
+
+      - name: Configurar GitHub Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Empaquetar sitio
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Publicar sitio
+        id: deployment
+        uses: actions/deploy-pages@v4
