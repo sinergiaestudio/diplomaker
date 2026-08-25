@@ -1,5 +1,6 @@
 {
   "version": "2.2.0-alpha.1",
+  "bundleVersion": "2.2.0-1",
   "channel": "alpha",
   "releasedAt": "2026-08-25T00:00:00Z",
   "summary": "Nueva identidad, tema claro predeterminado, biblioteca de proyectos, instalación visible y experiencia móvil renovada.",
