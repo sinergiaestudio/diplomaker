@@ -23,3 +23,10 @@ jobs:
         run: node tools/build-web.js
       - name: Preparar recursos de escritorio
         run: npm run build:desktop
+      - name: Subir vista previa web
+        uses: actions/upload-artifact@v4
+        with:
+          name: Diplomaker-Web-Preview
+          path: dist-web
+          if-no-files-found: error
+          retention-days: 7
