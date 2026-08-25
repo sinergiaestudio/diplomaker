@@ -15,6 +15,7 @@ const CORE_ASSETS = [
   './src/embedded-assets.js',
   './src/templates.js',
   './src/template-studio.js',
+  './src/desktop.js',
   './src/experience.js',
   './src/renderer.js',
   './src/pdf-writer.js',
