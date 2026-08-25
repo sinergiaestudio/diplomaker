@@ -1,11 +1,14 @@
 name: Control de calidad
+
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "release/**"]
   pull_request:
     branches: ["main"]
+
 permissions:
   contents: read
+
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -13,6 +16,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
-      - name: Verificar estructura, sintaxis y sanitización
+          node-version: "24"
+          cache: "npm"
+      - name: Instalar dependencias de desarrollo
+        run: npm install --ignore-scripts
+      - name: Verificar estructura, identidad, sintaxis y sanitización
         run: npm run check
+      - name: Preparar recursos de escritorio
+        run: npm run build:desktop
