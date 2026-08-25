@@ -28,9 +28,10 @@
       const tx = db.transaction(STORE, mode);
       const store = tx.objectStore(STORE);
       let result;
-      try { result = callback(store); } catch (error) { reject(error); return; }
+      try { result = callback(store); } catch (error) { db.close(); reject(error); return; }
       tx.oncomplete = () => { db.close(); resolve(result); };
       tx.onerror = () => { db.close(); reject(tx.error || new Error('Falló el almacenamiento local.')); };
+      tx.onabort = () => { db.close(); reject(tx.error || new Error('La operación de almacenamiento fue cancelada.')); };
     });
   }
 
@@ -38,6 +39,7 @@
     const snapshot = U.deepClone(project);
     snapshot.updatedAt = new Date().toISOString();
     if (!snapshot.createdAt) snapshot.createdAt = snapshot.updatedAt;
+    if (!snapshot.version || /^2\.[01]/.test(snapshot.version)) snapshot.version = '2.2.0';
     await withStore('readwrite', store => store.put(snapshot));
     localStorage.setItem(LAST_KEY, snapshot.id);
     return snapshot;
@@ -72,10 +74,16 @@
     });
   }
 
+  async function deleteProject(id) {
+    if (!id) return;
+    await withStore('readwrite', store => store.delete(id));
+    if (localStorage.getItem(LAST_KEY) === id) localStorage.removeItem(LAST_KEY);
+  }
+
   function exportProject(project) {
     const payload = {
       format: 'diplomaker-project',
-      version: '2.0-public.1',
+      version: '2.2.0',
       exportedAt: new Date().toISOString(),
       project: U.deepClone(project)
     };
@@ -89,8 +97,9 @@
     const project = parsed.project || parsed;
     if (!project || !Array.isArray(project.records)) throw new Error('El archivo no corresponde a un proyecto Diplomaker compatible.');
     if (!project.id) project.id = U.uuid('project');
+    if (!project.name) project.name = 'Proyecto importado';
     return project;
   }
 
-  DM.Storage = { saveProject, loadProject, loadLastProject, listProjects, exportProject, importProject };
+  DM.Storage = { saveProject, loadProject, loadLastProject, listProjects, deleteProject, exportProject, importProject };
 })();
