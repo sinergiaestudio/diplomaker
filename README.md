@@ -1,31 +1,51 @@
 # Diplomaker
 
-Aplicación local y de código abierto para crear diplomas y certificados individuales o por lote.
+Aplicación local y de código abierto para crear diplomas y certificados individuales o por lote, y para diseñar plantillas reutilizables sin modificar código.
 
-**Versión pública:** 2.0.0-beta.1  
+**Versión pública:** 2.1.0-beta.1  
 **Autor:** Marcelo Gómez  
 **Licencia:** MIT
 
-## Usar Diplomaker
+## Uso web
 
-**Aplicación web:** https://sinergiaestudio.github.io/diplomaker/
+La edición publicada en GitHub Pages está disponible en:
 
-La aplicación procesa los archivos en el navegador. No requiere cuenta y no envía las planillas a un servidor.
+`https://sinergiaestudio.github.io/diplomaker/`
 
 ## Funciones
 
-- creación de certificados individuales;
-- importación directa de XLSX y CSV;
+### Generación
+
+- certificado individual;
+- importación XLSX y CSV;
 - asociación automática o manual de columnas;
-- revisión y corrección previa de cada registro;
-- hasta cuatro firmantes;
+- revisión y corrección previa;
+- firmantes variables;
 - PDF individual y PDF conjunto;
-- ZIP con un PDF identificado por participante;
+- ZIP con un PDF por participante;
 - PNG de alta resolución e informe CSV;
-- guardado local y proyectos `.diplomaker`;
+- autosave local y proyectos `.diplomaker`;
 - funcionamiento offline después de la primera carga.
 
-## Plantillas públicas
+### Estudio visual de plantillas
+
+- lienzo A4 apaisado con vista previa directa;
+- fondo en PNG, JPG, WebP o SVG;
+- textos fijos y campos variables;
+- tokens dentro de textos: `{NOMBRE}`, `{TRATAMIENTO}`, `{NOMBRE_COMPLETO}`, `{TIPO_CERTIFICADO}`, `{EVENTO}`, `{FECHA}`, `{TEXTO}` y `{CUERPO}`;
+- imágenes y firmas gráficas;
+- líneas, rectángulos y círculos;
+- bloque dinámico de firmantes;
+- franja de logos con distribución automática;
+- arrastre, redimensionado, rotación, opacidad y orden de capas;
+- bloqueo y ocultamiento de elementos;
+- deshacer, rehacer, duplicar y movimientos con teclado;
+- guardado en IndexedDB;
+- exportación e importación `.diplomaker-template`;
+- migración básica de plantillas JSON creadas con la versión HTML 1.4;
+- inclusión automática de las plantillas utilizadas dentro de los proyectos portables.
+
+## Plantillas públicas integradas
 
 1. **Clásico azul** — azul, dorado y marfil.
 2. **Moderno bordó** — geometría en bordó y gris.
@@ -33,27 +53,37 @@ La aplicación procesa los archivos en el navegador. No requiere cuenta y no env
 
 No incluyen marcas, logos ni identidades de terceros. Los SVG editables están en `assets/templates/`.
 
-## Uso
+## Flujo de uso
 
-1. Elija **Certificado individual** o **Lote desde Excel**.
-2. Seleccione una plantilla.
-3. Complete los datos o cargue XLSX/CSV.
-4. Confirme la asociación de columnas.
-5. Revise los resultados.
-6. Exporte PDF, PNG, ZIP o informe.
+1. Elegir un diseño integrado o crear uno desde **Diseñar**.
+2. Completar una persona o cargar una planilla XLSX/CSV.
+3. Confirmar la asociación de columnas.
+4. Revisar nombres, textos y firmantes.
+5. Exportar PDF, PNG, ZIP o informe.
 
-## Archivos de ejemplo
+Para aplicar una plantilla personalizada desde Excel, puede escribirse en la columna `PLANTILLA` su nombre o su clave interna.
 
-La carpeta `examples/` contiene únicamente información ficticia:
+## Portabilidad
 
-- [`Plantilla_Diplomaker.xlsx`](examples/Plantilla_Diplomaker.xlsx), con hojas **Datos** y **Ayuda**;
-- [`datos_ficticios.csv`](examples/datos_ficticios.csv).
+Las plantillas se guardan localmente en el navegador. También pueden:
 
-No utilice el repositorio público para guardar planillas reales, proyectos con participantes ni certificados emitidos.
+- exportarse como `.diplomaker-template`;
+- importarse en otra computadora;
+- viajar incorporadas dentro de un proyecto `.diplomaker` cuando están siendo utilizadas.
+
+## Seguridad de plantillas
+
+- las imágenes se limitan a 15 MB por archivo;
+- los SVG se depuran antes de incorporarse;
+- las plantillas importadas se normalizan con listas permitidas de elementos, tipografías, colores y propiedades;
+- no se aceptan recursos remotos dentro de una plantilla;
+- los recursos incompatibles se descartan sin ejecutar contenido.
 
 ## Privacidad
 
-Consulte [PRIVACY.md](PRIVACY.md). Diplomaker no incorpora analítica, publicidad ni rastreadores propios.
+Los archivos se procesan en el navegador. Diplomaker no envía las planillas, logos, firmas ni certificados a un servidor. Lea [PRIVACY.md](PRIVACY.md).
+
+La carpeta `examples/` contiene únicamente datos ficticios. No se deben subir al repositorio proyectos o listados reales.
 
 ## Desarrollo
 
@@ -62,13 +92,15 @@ npm run check
 npm run serve
 ```
 
-La vista previa y la exportación usan el mismo motor Canvas. No es necesario instalar paquetes para usar la aplicación.
+La vista previa y la exportación usan el mismo motor Canvas. No es necesario instalar paquetes para utilizar la aplicación.
 
-## Publicación y controles
+## Publicación
 
-- `.github/workflows/pages.yml` publica automáticamente la rama `main` en GitHub Pages.
-- `.github/workflows/quality.yml` verifica estructura, sintaxis y ausencia de referencias reservadas para ediciones privadas.
+El workflow `.github/workflows/pages.yml` despliega la rama `main` en GitHub Pages.
 
-## Próximo ciclo
+## Documentación
 
-Editor visual por capas, carga de fondos, logos y firmas, campos arrastrables e importación de plantillas.
+- [Estudio de plantillas](docs/ESTUDIO_DE_PLANTILLAS.md)
+- [Arquitectura](docs/ARQUITECTURA.md)
+- [Pruebas](docs/PRUEBAS.md)
+- [Privacidad](PRIVACY.md)

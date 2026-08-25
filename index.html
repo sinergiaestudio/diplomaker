@@ -16,7 +16,7 @@
         <div class="brand-mark" aria-hidden="true">D</div>
         <div>
           <div class="brand-name">Diplomaker</div>
-          <div class="brand-version">2.0 · Beta pública 0.1</div>
+          <div class="brand-version">2.1 · Estudio de plantillas</div>
         </div>
       </div>
 
@@ -76,7 +76,7 @@
           <button class="action-card" data-view-target="templates">
             <span class="action-icon">◇</span>
             <strong>Biblioteca de plantillas</strong>
-            <small>Elegí entre los diseños clásico, moderno y académico.</small>
+            <small>Elegí diseños integrados o plantillas creadas por vos.</small>
           </button>
         </div>
 
@@ -292,19 +292,19 @@
         <div class="section-header">
           <div>
             <div class="eyebrow">BIBLIOTECA</div>
-            <h2>Plantillas generales</h2>
-            <p>Tres diseños neutros, sin marcas ni identidades de terceros.</p>
+            <h2>Biblioteca de plantillas</h2>
+            <p>Diseños integrados y plantillas personalizadas creadas en esta computadora.</p>
           </div>
-          <span class="pill">3 integradas</span>
+          <span class="pill">3 integradas + personalizadas</span>
         </div>
         <div class="template-library" id="templateLibrary"></div>
         <div class="panel top-gap roadmap-panel">
           <div>
-            <div class="eyebrow">PRÓXIMO SPRINT</div>
+            <div class="eyebrow">CREACIÓN SIN CÓDIGO</div>
             <h3>Estudio visual de plantillas</h3>
-            <p>El editor por capas, logos dinámicos, firmas gráficas y campos arrastrables se incorporará sobre este mismo motor de composición.</p>
+            <p>Subí un fondo, arrastrá campos, agregá logos y firmantes, y exportá el diseño para usarlo en otra computadora.</p>
           </div>
-          <span class="roadmap-tag">En desarrollo</span>
+          <button class="primary-button" data-studio-open>Diseñar plantilla</button>
         </div>
       </section>
     </main>
@@ -335,7 +335,7 @@
       <li>Revisá advertencias y desbordamientos.</li>
       <li>Exportá PDF, PNG, ZIP o informe.</li>
     </ol>
-    <p>Todo el procesamiento se realiza localmente. La aplicación no envía los datos de las planillas a un servidor.</p><p class="muted-text">Diplomaker 2.0 · Beta pública 0.1 · 19/08/2026 · Ariel Marcelo Gómez</p>
+    <p>Todo el procesamiento se realiza localmente. La aplicación no envía los datos de las planillas a un servidor.</p><p class="muted-text">Diplomaker 2.1 · Estudio de plantillas · 24/08/2026 · Ariel Marcelo Gómez</p>
   </dialog>
 
   <script src="vendor/jszip.min.js"></script>
@@ -347,6 +347,7 @@
   <script src="src/renderer.js"></script>
   <script src="src/pdf-writer.js"></script>
   <script src="src/storage.js"></script>
+  <script src="src/template-studio.js"></script>
   <script src="src/app.js"></script>
 </body>
 </html>
