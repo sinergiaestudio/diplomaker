@@ -1,106 +1,202 @@
-# Diplomaker
+<p align="center">
+  <img src="assets/brand/diplomaker-horizontal.svg" alt="Diplomaker" width="520">
+</p>
 
-Aplicación local y de código abierto para crear diplomas y certificados individuales o por lote, y para diseñar plantillas reutilizables sin modificar código.
+<h2 align="center">Diseñá una vez. Emití con precisión.</h2>
 
-**Versión pública:** 2.1.0-beta.1  
-**Autor:** Marcelo Gómez  
-**Licencia:** MIT
+<p align="center">
+  Estudio local y de código abierto para diseñar plantillas reutilizables y emitir diplomas o certificados individuales y por lote.
+</p>
 
-## Uso web
+<p align="center">
+  <a href="https://sinergiaestudio.github.io/diplomaker/"><strong>Usar Diplomaker en línea</strong></a>
+  ·
+  <a href="docs/INSTALLATION.md">Instalación</a>
+  ·
+  <a href="docs/ESTUDIO_DE_PLANTILLAS.md">Estudio de plantillas</a>
+  ·
+  <a href="PRIVACY.md">Privacidad</a>
+</p>
 
-La edición publicada en GitHub Pages está disponible en:
+<p align="center">
+  <img alt="versión" src="https://img.shields.io/badge/versión-2.2.0--alpha.1-365F91">
+  <img alt="licencia MIT" src="https://img.shields.io/badge/licencia-MIT-B28A46">
+  <img alt="offline first" src="https://img.shields.io/badge/offline-first-2F7D5C">
+  <img alt="datos locales" src="https://img.shields.io/badge/datos-locales-687386">
+</p>
 
-`https://sinergiaestudio.github.io/diplomaker/`
+---
 
-## Funciones
+## Qué es Diplomaker
+
+Diplomaker reúne en una sola herramienta dos recorridos que suelen estar separados:
+
+1. **diseñar una plantilla** mediante un editor visual, sin modificar código;
+2. **emitir documentos** para una persona o para cientos de registros importados desde Excel o CSV.
+
+La vista previa y los archivos finales utilizan el mismo motor de composición. Los nombres, planillas, logos, firmas, plantillas y proyectos se procesan en el dispositivo del usuario.
+
+> **Tus plantillas. Tus datos. Tus certificados.**
+
+## Funciones principales
 
 ### Generación
 
 - certificado individual;
-- importación XLSX y CSV;
-- asociación automática o manual de columnas;
-- revisión y corrección previa;
+- lotes desde XLSX o CSV;
+- detección y asociación de columnas;
+- edición y revisión previa;
+- advertencias por texto extenso, datos faltantes o archivos repetidos;
 - firmantes variables;
 - PDF individual y PDF conjunto;
 - ZIP con un PDF por participante;
-- PNG de alta resolución e informe CSV;
-- autosave local y proyectos `.diplomaker`;
-- funcionamiento offline después de la primera carga.
+- PNG de alta resolución;
+- informe CSV de emisión.
 
 ### Estudio visual de plantillas
 
-- lienzo A4 apaisado con vista previa directa;
+- lienzo A4 apaisado;
 - fondo en PNG, JPG, WebP o SVG;
 - textos fijos y campos variables;
-- tokens dentro de textos: `{NOMBRE}`, `{TRATAMIENTO}`, `{NOMBRE_COMPLETO}`, `{TIPO_CERTIFICADO}`, `{EVENTO}`, `{FECHA}`, `{TEXTO}` y `{CUERPO}`;
-- imágenes y firmas gráficas;
+- imágenes, logos, sellos y firmas gráficas;
 - líneas, rectángulos y círculos;
-- bloque dinámico de firmantes;
-- franja de logos con distribución automática;
-- arrastre, redimensionado, rotación, opacidad y orden de capas;
-- bloqueo y ocultamiento de elementos;
-- deshacer, rehacer, duplicar y movimientos con teclado;
-- guardado en IndexedDB;
+- bloques dinámicos de firmantes;
+- distribución automática de logos;
+- arrastre, redimensionado, rotación y opacidad;
+- capas, bloqueo y ocultamiento;
+- deshacer, rehacer y duplicar;
 - exportación e importación `.diplomaker-template`;
-- migración básica de plantillas JSON creadas con la versión HTML 1.4;
-- inclusión automática de las plantillas utilizadas dentro de los proyectos portables.
+- migración básica de plantillas creadas con la versión HTML 1.4.
+
+### Proyectos y continuidad
+
+- guardado automático en IndexedDB;
+- biblioteca local de proyectos;
+- renombrado, duplicado, exportación y eliminación;
+- respaldo conjunto en ZIP;
+- restauración de respaldos;
+- proyectos portables `.diplomaker`;
+- solicitud de almacenamiento persistente en navegadores compatibles;
+- en la edición de escritorio, réplica automática en `Documentos/Diplomaker/Proyectos`.
+
+### Apariencia e instalación
+
+- tema claro predeterminado;
+- tema oscuro alternativo;
+- modo automático según el sistema;
+- navegación móvil específica;
+- instalación como PWA desde Chrome o Edge;
+- funcionamiento offline después de la primera carga;
+- edición de escritorio para Windows basada en Tauri.
 
 ## Plantillas públicas integradas
 
-1. **Clásico azul** — azul, dorado y marfil.
-2. **Moderno bordó** — geometría en bordó y gris.
-3. **Académico verde** — verde, dorado y marfil.
+| Plantilla | Características |
+|---|---|
+| **Clásico azul** | Azul, dorado y marfil; composición ceremonial. |
+| **Moderno bordó** | Geometría contemporánea en bordó y gris. |
+| **Académico verde** | Verde, dorado y marfil; presentación sobria. |
 
-No incluyen marcas, logos ni identidades de terceros. Los SVG editables están en `assets/templates/`.
+Las plantillas públicas no incluyen marcas, autoridades ni identidades de terceros. Cada organización puede importar localmente sus propios fondos, logos y archivos `.diplomaker-template` sin incorporarlos al repositorio.
 
-## Flujo de uso
+## Flujo de trabajo
+
+```text
+Plantilla → Datos → Revisión → Exportación
+```
 
 1. Elegir un diseño integrado o crear uno desde **Diseñar**.
-2. Completar una persona o cargar una planilla XLSX/CSV.
+2. Completar una persona o abrir una planilla XLSX/CSV.
 3. Confirmar la asociación de columnas.
-4. Revisar nombres, textos y firmantes.
+4. Revisar nombres, textos, logos y firmantes.
 5. Exportar PDF, PNG, ZIP o informe.
 
-Para aplicar una plantilla personalizada desde Excel, puede escribirse en la columna `PLANTILLA` su nombre o su clave interna.
+## Formatos
 
-## Portabilidad
+### Entrada
 
-Las plantillas se guardan localmente en el navegador. También pueden:
+- `.xlsx`;
+- `.csv`;
+- `.diplomaker`;
+- `.diplomaker-template`;
+- PNG, JPG, WebP y SVG para recursos gráficos.
 
-- exportarse como `.diplomaker-template`;
-- importarse en otra computadora;
-- viajar incorporadas dentro de un proyecto `.diplomaker` cuando están siendo utilizadas.
+### Salida
 
-## Seguridad de plantillas
-
-- las imágenes se limitan a 15 MB por archivo;
-- los SVG se depuran antes de incorporarse;
-- las plantillas importadas se normalizan con listas permitidas de elementos, tipografías, colores y propiedades;
-- no se aceptan recursos remotos dentro de una plantilla;
-- los recursos incompatibles se descartan sin ejecutar contenido.
+- PDF individual;
+- PDF conjunto;
+- ZIP de PDFs individuales;
+- PNG;
+- CSV de control;
+- proyecto portable `.diplomaker`;
+- plantilla portable `.diplomaker-template`.
 
 ## Privacidad
 
-Los archivos se procesan en el navegador. Diplomaker no envía las planillas, logos, firmas ni certificados a un servidor. Lea [PRIVACY.md](PRIVACY.md).
+Diplomaker no requiere cuenta ni servidor para sus funciones principales. Los archivos se leen y procesan localmente. El repositorio público utiliza únicamente datos ficticios y recursos genéricos.
 
-La carpeta `examples/` contiene únicamente datos ficticios. No se deben subir al repositorio proyectos o listados reales.
+Consulte la [política de privacidad](PRIVACY.md) y el [aviso sobre recursos de terceros](NOTICE.md).
+
+## Instalación
+
+### Web y PWA
+
+Abra [Diplomaker en GitHub Pages](https://sinergiaestudio.github.io/diplomaker/). En navegadores compatibles aparecerá el botón **Instalar**. También puede usarse desde el menú del navegador.
+
+### Windows
+
+La edición de escritorio se compila con Tauri y genera instaladores NSIS y MSI. Durante la fase alpha, los paquetes se publican como artefactos de prueba; las versiones estables aparecerán en GitHub Releases.
+
+Lea [Instalación y actualización](docs/INSTALLATION.md) y [Diplomaker Desktop](docs/DESKTOP.md).
 
 ## Desarrollo
+
+Requisitos de la edición web:
 
 ```bash
 npm run check
 npm run serve
 ```
 
-La vista previa y la exportación usan el mismo motor Canvas. No es necesario instalar paquetes para utilizar la aplicación.
+Para la edición de escritorio:
 
-## Publicación
+```bash
+npm install
+npm run desktop:dev
+npm run desktop:build
+```
 
-El workflow `.github/workflows/pages.yml` despliega la rama `main` en GitHub Pages.
+La compilación genera automáticamente los íconos oficiales y prepara la carpeta `dist/` antes de invocar Tauri.
+
+## Arquitectura
+
+```text
+Datos + Plantilla + Recursos
+              ↓
+       Motor de composición
+        ↙             ↘
+ Vista previa      PDF / PNG / ZIP
+```
+
+La versión web utiliza IndexedDB. La edición de escritorio conserva esa compatibilidad y agrega una capa de archivos locales, sin duplicar el frontend.
+
+## Identidad
+
+La marca combina un documento, la letra D y un sello de validación. El sistema completo, la paleta y las reglas de uso se documentan en [BRAND.md](docs/BRAND.md).
 
 ## Documentación
 
+- [Identidad visual](docs/BRAND.md)
+- [Instalación y actualizaciones](docs/INSTALLATION.md)
+- [Proyectos y respaldos](docs/PROJECTS.md)
+- [Diplomaker Desktop](docs/DESKTOP.md)
 - [Estudio de plantillas](docs/ESTUDIO_DE_PLANTILLAS.md)
 - [Arquitectura](docs/ARQUITECTURA.md)
 - [Pruebas](docs/PRUEBAS.md)
 - [Privacidad](PRIVACY.md)
+
+## Autor y licencia
+
+Creado por [Marcelo Gómez](https://github.com/sinergiaestudio).
+
+Diplomaker se distribuye bajo [licencia MIT](LICENSE). Los logos, fondos, firmas y recursos que cada usuario incorpora conservan las condiciones de sus respectivos titulares.
