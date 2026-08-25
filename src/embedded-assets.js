@@ -48,4 +48,28 @@
   <path d="M310 665 H810" stroke="#275d50" stroke-width="1" opacity=".25"/>
 </svg>`)
   } };
+
+  const themePreference = ['light', 'dark', 'system'].includes(localStorage.getItem('diplomaker:theme'))
+    ? localStorage.getItem('diplomaker:theme')
+    : 'light';
+  const resolvedTheme = themePreference === 'system'
+    ? (window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+    : themePreference;
+  document.documentElement.dataset.theme = resolvedTheme;
+  document.documentElement.dataset.themePreference = themePreference;
+
+  if (!document.querySelector('link[data-diplomaker-experience]')) {
+    const stylesheet = document.createElement('link');
+    stylesheet.rel = 'stylesheet';
+    stylesheet.href = 'styles/experience.css?v=2.2.0-alpha.1';
+    stylesheet.dataset.diplomakerExperience = 'true';
+    document.head.appendChild(stylesheet);
+  }
+  if (!document.querySelector('script[data-diplomaker-experience]')) {
+    const script = document.createElement('script');
+    script.src = 'src/experience.js?v=2.2.0-alpha.1';
+    script.async = false;
+    script.dataset.diplomakerExperience = 'true';
+    document.head.appendChild(script);
+  }
 })();
