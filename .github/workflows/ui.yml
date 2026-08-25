@@ -18,7 +18,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: diplomaker-ui-${{ github.ref }}
@@ -30,6 +30,8 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -69,3 +71,27 @@ jobs:
           path: test-artifacts/
           if-no-files-found: warn
           retention-days: 14
+
+      - name: Actualizar capturas verificadas del repositorio
+        if: success() && github.event_name == 'push'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p docs/screenshots
+          cp test-artifacts/home-light.png docs/screenshots/home-light.png
+          cp test-artifacts/home-dark.png docs/screenshots/home-dark.png
+          cp test-artifacts/review.png docs/screenshots/review.png
+          cp test-artifacts/projects.png docs/screenshots/projects.png
+          cp test-artifacts/studio.png docs/screenshots/template-studio.png
+          cp test-artifacts/mobile-home.png docs/screenshots/mobile.png
+          cp test-artifacts/mobile-more.png docs/screenshots/mobile-more.png
+          cp test-artifacts/results.json docs/screenshots/ui-results.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/screenshots
+          if git diff --cached --quiet; then
+            echo "Las capturas ya estaban actualizadas."
+          else
+            git commit -m "Actualizar capturas verificadas de Diplomaker 2.2"
+            git push origin HEAD:release/2.2.0
+          fi
