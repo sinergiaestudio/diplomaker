@@ -25,10 +25,13 @@ const manifest=JSON.parse(fs.readFileSync(path.join(root,'manifest.webmanifest')
 if(manifest.background_color!=='#f5f7fa'){console.error('El manifiesto no usa el tema claro como fondo predeterminado.');failed=true;}
 const version=JSON.parse(fs.readFileSync(path.join(root,'version.json'),'utf8'));
 if(!/^2\.2\./.test(version.version||'')){console.error('version.json no identifica Diplomaker 2.2.');failed=true;}
+if(!/^2\.2\.0-[0-9]+$/.test(version.bundleVersion||'')){console.error('bundleVersion no es compatible con MSI.');failed=true;}
 const packageData=JSON.parse(fs.readFileSync(path.join(root,'package.json'),'utf8'));
-if(packageData.version!==version.version){console.error('package.json y version.json no coinciden.');failed=true;}
+if(packageData.version!==version.bundleVersion){console.error('package.json y bundleVersion no coinciden.');failed=true;}
 const tauriConfig=JSON.parse(fs.readFileSync(path.join(root,'src-tauri/tauri.conf.json'),'utf8'));
-if(tauriConfig.version!==version.version){console.error('tauri.conf.json y version.json no coinciden.');failed=true;}
+if(tauriConfig.version!==version.bundleVersion){console.error('tauri.conf.json y bundleVersion no coinciden.');failed=true;}
+const cargo=fs.readFileSync(path.join(root,'src-tauri/Cargo.toml'),'utf8');
+if(!cargo.includes(`version = "${version.bundleVersion}"`)){console.error('Cargo.toml y bundleVersion no coinciden.');failed=true;}
 if(tauriConfig.app?.withGlobalTauri!==true){console.error('Tauri no expone el puente global requerido por desktop.js.');failed=true;}
 if(failed)process.exit(1);
 console.log('Control estático, de integración, identidad, escritorio y sanitización completado sin errores.');
