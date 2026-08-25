@@ -65,6 +65,9 @@ async function downloadedBytes(download, filename) {
     assert(await page.getAttribute('html', 'data-theme') === 'light', 'El ciclo de temas no regresó al modo claro.');
 
     log('Creando certificado individual');
+    await page.click('[data-start-mode="individual"]');
+    await page.waitForSelector('#view-create.active');
+    await page.waitForSelector('#individualForm input[name="participantName"]:visible');
     await page.fill('#individualForm input[name="participantName"]', 'Sofía Martínez');
     await page.fill('#individualForm input[name="eventTitle"]', 'Taller de herramientas digitales');
     await page.fill('#individualForm textarea[name="eventText"]', 'En reconocimiento por su participación en la actividad.');
