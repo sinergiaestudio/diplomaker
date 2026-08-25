@@ -137,6 +137,41 @@ fn projects_directory(app: AppHandle) -> Result<String, String> {
     Ok(projects_dir(&app)?.to_string_lossy().to_string())
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn normalizes_project_names_without_losing_unicode_letters() {
+        assert_eq!(safe_fragment("Jornada de Género 2026", "Proyecto"), "Jornada_de_Género_2026");
+        assert_eq!(safe_fragment("  Mesa / Federal : JxJ  ", "Proyecto"), "Mesa_Federal_JxJ");
+    }
+
+    #[test]
+    fn uses_fallback_for_empty_or_symbol_only_names() {
+        assert_eq!(safe_fragment("***", "Proyecto_Diplomaker"), "Proyecto_Diplomaker");
+        assert_eq!(safe_fragment("", "project"), "project");
+    }
+
+    #[test]
+    fn limits_file_name_fragments() {
+        let value = "a".repeat(140);
+        assert_eq!(safe_fragment(&value, "Proyecto").chars().count(), 90);
+    }
+
+    #[test]
+    fn creates_stable_project_suffixes() {
+        assert_eq!(project_suffix("project-123/456"), "--project_123_456.diplomaker");
+    }
+
+    #[test]
+    fn recognizes_only_diplomaker_project_files() {
+        assert!(is_project_file(Path::new("Proyecto.diplomaker")));
+        assert!(!is_project_file(Path::new("Proyecto.json")));
+        assert!(!is_project_file(Path::new("Proyecto.diplomaker.tmp")));
+    }
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
