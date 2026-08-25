@@ -2,7 +2,7 @@
 name = "diplomaker"
 version = "2.2.0-1"
 description = "Estudio local de diplomas y certificados"
-authors = ["Marcelo Gómez"]
+authors = ["Marcelo Gomez"]
 edition = "2021"
 rust-version = "1.77.2"
 
