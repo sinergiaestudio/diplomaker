@@ -1,0 +1,9 @@
+{
+  "version": "2.2.0-alpha.1",
+  "channel": "alpha",
+  "releasedAt": "2026-08-25T00:00:00Z",
+  "summary": "Nueva identidad, tema claro predeterminado, biblioteca de proyectos, instalación visible y experiencia móvil renovada.",
+  "minimumProjectVersion": "2.0.0",
+  "homepage": "https://sinergiaestudio.github.io/diplomaker/",
+  "repository": "https://github.com/sinergiaestudio/diplomaker"
+}
