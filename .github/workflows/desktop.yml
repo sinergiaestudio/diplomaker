@@ -36,21 +36,29 @@ jobs:
   windows:
     name: Windows x64
     runs-on: windows-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "24"
       - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "src-tauri -> target"
       - name: Instalar Tauri CLI
         run: npm install --ignore-scripts
       - name: Control integral
         run: npm run check
       - name: Compilar NSIS y MSI
-        uses: tauri-apps/tauri-action@v0.6.2
+        run: npm run desktop:build -- --bundles nsis,msi
+      - name: Subir instaladores y ejecutable
+        uses: actions/upload-artifact@v4
         with:
-          projectPath: .
-          args: --bundles nsis,msi
-          uploadWorkflowArtifacts: true
-          workflowArtifactNamePattern: Diplomaker-[version]-[platform]-[arch]-[bundle]
+          name: Diplomaker-Windows-x64
+          path: |
+            src-tauri/target/release/diplomaker.exe
+            src-tauri/target/release/bundle/nsis/*.exe
+            src-tauri/target/release/bundle/msi/*.msi
+          if-no-files-found: error
+          retention-days: 14
