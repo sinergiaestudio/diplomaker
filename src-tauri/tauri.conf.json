@@ -37,8 +37,8 @@
     "category": "Productivity",
     "shortDescription": "Estudio local de diplomas y certificados",
     "longDescription": "Diplomaker permite diseñar plantillas, importar planillas y emitir diplomas o certificados individuales y por lote con procesamiento local.",
-    "publisher": "Marcelo Gómez",
-    "copyright": "© 2026 Marcelo Gómez",
+    "publisher": "Marcelo Gomez",
+    "copyright": "Copyright 2026 Marcelo Gomez",
     "createUpdaterArtifacts": false,
     "icon": [
       "icons/32x32.png",
