@@ -1,4 +1,4 @@
-# Diagnóstico y publicación definitiva de Diplomaker 2.1 · 25/08/2026
+# Diagnóstico de segmentos y publicación de Diplomaker 2.1 · 25/08/2026
 name: Aplicar Diplomaker 2.1
 
 on:
@@ -48,10 +48,11 @@ jobs:
               return ''.join(ch for ch in text if ch in alphabet)
 
           parts = [clean(f'.github/dm21/part-{i:02d}') for i in range(8)]
-          for i, part in enumerate(parts):
-              print(f'PARTE {i}: len={len(part)} sha256={hashlib.sha256(part.encode()).hexdigest()} inicio={part[:16]} fin={part[-16:]}')
+          segments = parts[:5] + [parts[5][:7000], parts[6][:7000], parts[7][:5872]]
+          for i, segment in enumerate(segments):
+              print(f'SEGMENTO {i}: len={len(segment)} sha256={hashlib.sha256(segment.encode()).hexdigest()} inicio={segment[:16]} fin={segment[-16:]}')
 
-          payload = ''.join(parts[:5]) + parts[5][:7000] + parts[6][:7000] + parts[7][:5872]
+          payload = ''.join(segments)
           print(f'PAYLOAD: len={len(payload)} sha256-texto={hashlib.sha256(payload.encode()).hexdigest()}')
           if len(payload) != 54872:
               raise SystemExit(f'Longitud Base64 inesperada: {len(payload)}')
