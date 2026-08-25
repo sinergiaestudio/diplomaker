@@ -100,8 +100,9 @@ async function downloadedBytes(download, filename) {
   await page.waitForFunction(() => document.querySelector('#mobileMoreSheet')?.open === true);
   await page.screenshot({ path: path.join(OUTPUT, 'mobile-more.png'), fullPage: true });
 
+  const version = await page.evaluate(() => window.Diplomaker?.Experience?.version || 'desconocida');
   const results = {
-    version: window?.Diplomaker?.Experience?.version || '2.2.0-alpha.2',
+    version,
     title,
     theme: 'light/dark/system',
     pdfBytes: pdf.bytes.length,
@@ -117,7 +118,7 @@ async function downloadedBytes(download, filename) {
 
   await browser.close();
   console.log('Prueba integral de interfaz completada sin errores.');
-})().catch(async error => {
+})().catch(error => {
   console.error(error);
   process.exitCode = 1;
 });
