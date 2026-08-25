@@ -35,14 +35,24 @@
     });
   }
 
-  async function saveProject(project) {
+  async function putProject(project, options = {}) {
+    const { touch = true, setLast = true } = options;
     const snapshot = U.deepClone(project);
-    snapshot.updatedAt = new Date().toISOString();
+    if (!snapshot.id) snapshot.id = U.uuid('project');
+    if (touch || !snapshot.updatedAt) snapshot.updatedAt = new Date().toISOString();
     if (!snapshot.createdAt) snapshot.createdAt = snapshot.updatedAt;
     if (!snapshot.version || /^2\.[01]/.test(snapshot.version)) snapshot.version = '2.2.0';
     await withStore('readwrite', store => store.put(snapshot));
-    localStorage.setItem(LAST_KEY, snapshot.id);
+    if (setLast) localStorage.setItem(LAST_KEY, snapshot.id);
     return snapshot;
+  }
+
+  function saveProject(project) {
+    return putProject(project, { touch: true, setLast: true });
+  }
+
+  function restoreProject(project) {
+    return putProject(project, { touch: false, setLast: false });
   }
 
   async function loadProject(id) {
@@ -101,5 +111,5 @@
     return project;
   }
 
-  DM.Storage = { saveProject, loadProject, loadLastProject, listProjects, deleteProject, exportProject, importProject };
+  DM.Storage = { saveProject, restoreProject, loadProject, loadLastProject, listProjects, deleteProject, exportProject, importProject };
 })();
