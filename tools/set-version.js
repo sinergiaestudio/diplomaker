@@ -68,15 +68,6 @@ installation = installation
   .replace(/Diplomaker-2\.2\.0-alpha\.\d+/g, `Diplomaker-${publicVersion}`);
 write('docs/INSTALLATION.md', installation);
 
-let workflow = read('.github/workflows/publish-alpha.yml');
-workflow = workflow
-  .replace(/name: Publicar Diplomaker 2\.2 alpha \d+/, `name: Publicar Diplomaker 2.2 alpha ${alphaNumber}`)
-  .replace(/TAG_NAME: v[^\n]+/, `TAG_NAME: v${publicVersion}`)
-  .replace(/DISPLAY_VERSION: [^\n]+/, `DISPLAY_VERSION: ${publicVersion}`)
-  .replace(/# Diplomaker 2\.2 alpha \d+/, `# Diplomaker 2.2 alpha ${alphaNumber}`)
-  .replace(/Primera versión de prueba de \*\*Diplomaker 2\.2/, `Versión de prueba actualizada de **Diplomaker 2.2`);
-write('.github/workflows/publish-alpha.yml', workflow);
-
 const changelogPath = 'CHANGELOG.md';
 let changelog = read(changelogPath);
 if (!changelog.includes(`## ${publicVersion}`)) {
