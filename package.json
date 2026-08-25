@@ -1,1 +1,25 @@
-{"name":"diplomaker","version":"2.1.0-beta.1","private":false,"description":"Creador local y de código abierto de diplomas, certificados y plantillas personalizadas","license":"MIT","scripts":{"serve":"node tools/server.js","check":"node tools/static-check.js"},"engines":{"node":">=18"}}
+{
+  "name": "diplomaker",
+  "version": "2.2.0-alpha.1",
+  "private": false,
+  "description": "Estudio local y de código abierto para diseñar y emitir diplomas, certificados y plantillas reutilizables",
+  "license": "MIT",
+  "author": {
+    "name": "Marcelo Gómez",
+    "url": "https://github.com/sinergiaestudio"
+  },
+  "scripts": {
+    "serve": "node tools/server.js",
+    "check": "node tools/static-check.js",
+    "build:desktop": "node tools/build-desktop.js",
+    "tauri": "tauri",
+    "desktop:dev": "tauri dev",
+    "desktop:build": "tauri build"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.8.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
