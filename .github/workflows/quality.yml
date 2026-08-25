@@ -17,10 +17,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "24"
-          cache: "npm"
-      - name: Instalar dependencias de desarrollo
-        run: npm install --ignore-scripts
       - name: Verificar estructura, identidad, sintaxis y sanitización
         run: npm run check
+      - name: Preparar recursos web
+        run: node tools/build-web.js
       - name: Preparar recursos de escritorio
         run: npm run build:desktop
