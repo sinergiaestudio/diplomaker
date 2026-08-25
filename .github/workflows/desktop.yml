@@ -1,0 +1,56 @@
+name: Diplomaker Desktop
+
+on:
+  push:
+    branches: ["release/**"]
+    paths:
+      - "src-tauri/**"
+      - "src/**"
+      - "styles/**"
+      - "assets/**"
+      - "tools/**"
+      - "index.html"
+      - "package.json"
+      - "manifest.webmanifest"
+      - "version.json"
+      - ".github/workflows/desktop.yml"
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "src-tauri/**"
+      - "src/**"
+      - "styles/**"
+      - "assets/**"
+      - "tools/**"
+      - "index.html"
+      - "package.json"
+      - "manifest.webmanifest"
+      - "version.json"
+      - ".github/workflows/desktop.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    name: Windows x64
+    runs-on: windows-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Instalar Tauri CLI
+        run: npm install --ignore-scripts
+      - name: Control integral
+        run: npm run check
+      - name: Compilar NSIS y MSI
+        uses: tauri-apps/tauri-action@v0.6.2
+        with:
+          projectPath: .
+          args: --bundles nsis,msi
+          uploadWorkflowArtifacts: true
+          workflowArtifactNamePattern: Diplomaker-[version]-[platform]-[arch]-[bundle]
