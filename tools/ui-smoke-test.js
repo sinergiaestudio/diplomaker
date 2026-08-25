@@ -131,7 +131,7 @@ async function downloadedBytes(download, filename) {
     assert(mobileNavDisplay === 'grid', 'La navegación inferior móvil no está visible.');
     await page.screenshot({ path: path.join(OUTPUT, 'mobile-home.png'), fullPage: true });
 
-    await page.click('#mobileBottomNav [data-mobile-primary="more"]');
+    await page.click('#mobileBottomNav [data-mobile-more]');
     await page.waitForFunction(() => document.querySelector('#mobileMoreSheet')?.open === true);
     await page.screenshot({ path: path.join(OUTPUT, 'mobile-more.png'), fullPage: true });
 
