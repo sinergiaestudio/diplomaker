@@ -14,6 +14,7 @@
   const Storage = DM.Storage;
   const original = {
     saveProject: Storage.saveProject.bind(Storage),
+    restoreProject: Storage.restoreProject?.bind(Storage),
     loadLastProject: Storage.loadLastProject.bind(Storage),
     listProjects: Storage.listProjects.bind(Storage),
     deleteProject: Storage.deleteProject?.bind(Storage)
@@ -33,11 +34,12 @@
   async function importSnapshotsFromDisk() {
     try {
       const snapshots = await invoke('load_project_snapshots');
+      const restore = original.restoreProject || original.saveProject;
       for (const snapshot of Array.isArray(snapshots) ? snapshots : []) {
         try {
           const parsed = JSON.parse(snapshot.contents);
           const project = parsed.project || parsed;
-          if (project?.id && Array.isArray(project.records)) await original.saveProject(project);
+          if (project?.id && Array.isArray(project.records)) await restore(project);
         } catch (error) {
           console.warn(`No se pudo importar ${snapshot.fileName || 'un proyecto'} desde disco.`, error);
         }
@@ -53,7 +55,10 @@
 
   Storage.loadLastProject = async function loadLastProjectDesktop() {
     await ready;
-    return original.loadLastProject();
+    const selected = await original.loadLastProject();
+    if (selected) return selected;
+    const projects = await original.listProjects();
+    return projects[0] || null;
   };
 
   Storage.listProjects = async function listProjectsDesktop() {
