@@ -156,6 +156,7 @@ jobs:
       - name: Crear o actualizar prerelease
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
         shell: bash
         run: |
           set -euo pipefail
