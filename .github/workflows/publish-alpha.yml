@@ -1,4 +1,4 @@
-name: Publicar Diplomaker 2.2 alpha 1
+name: Publicar Diplomaker 2.2 alpha 2
 
 on:
   push:
@@ -14,8 +14,8 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  TAG_NAME: v2.2.0-alpha.1
-  DISPLAY_VERSION: 2.2.0-alpha.1
+  TAG_NAME: v2.2.0-alpha.2
+  DISPLAY_VERSION: 2.2.0-alpha.2
 
 jobs:
   tag:
@@ -128,30 +128,39 @@ jobs:
         shell: bash
         run: |
           cat > release-notes.md <<'EOF'
-          # Diplomaker 2.2 alpha 1
+          # Diplomaker 2.2 alpha 2
 
-          Primera versión de prueba de **Diplomaker 2.2 — Identidad, experiencia y escritorio**.
+          Versión de prueba actualizada de **Diplomaker 2.2 — Identidad, experiencia y escritorio**.
 
           ## Cambios principales
 
-          - logo e identidad visual oficiales;
-          - tema claro predeterminado, tema oscuro y modo automático;
-          - autoría visible de Marcelo Gómez con vínculo a GitHub;
-          - nueva experiencia móvil y navegación inferior;
-          - biblioteca de proyectos con respaldo y restauración;
-          - instalación como PWA y actualización explícita;
+          - logo, favicon, iconos PWA, iconos Windows y portada social oficiales;
+          - tema claro predeterminado, tema oscuro y modo automático persistente;
+          - nueva portada editorial y autoría visible de Marcelo Gómez con vínculo a GitHub;
+          - navegación móvil inferior y menú “Más”;
+          - biblioteca de proyectos con renombrado, duplicado, respaldo y restauración;
+          - solicitud de almacenamiento persistente y actualización explícita sin borrar proyectos;
           - aplicación de escritorio para Windows mediante Tauri;
-          - persistencia adicional en `Documentos/Diplomaker/Proyectos`;
-          - instaladores NSIS y MSI, más ejecutable portable;
-          - paquete web portable y verificaciones SHA-256.
+          - réplica automática y atómica de proyectos en `Documentos/Diplomaker/Proyectos`;
+          - instaladores NSIS y MSI, ejecutable portable y paquete web portable;
+          - verificaciones estáticas, de privacidad, identidad, PDF, ZIP y experiencia responsive.
+
+          ## Verificaciones realizadas
+
+          - generación y revisión de certificados individuales;
+          - exportación de PDF y ZIP identificados por participante;
+          - funcionamiento del Estudio de Plantillas;
+          - temas claro, oscuro y automático;
+          - biblioteca y reapertura de proyectos;
+          - navegación móvil;
+          - compilación de NSIS, MSI y ejecutable portable;
+          - ausencia de referencias institucionales privadas en la edición pública.
 
           ## Estado
 
-          Esta edición es **alpha**. Está destinada a validación funcional y visual antes de reemplazar la versión pública estable 2.1.
+          Esta edición es **alpha**. Está destinada a validación final en Windows y dispositivos móviles antes de reemplazar la versión pública estable 2.1.
 
-          Los instaladores de Windows todavía no poseen firma de código. Windows SmartScreen puede mostrar una advertencia del editor desconocido. Los archivos fueron generados por GitHub Actions y sus huellas se incluyen en `SHA256SUMS.txt`.
-
-          La edición pública contiene exclusivamente plantillas genéricas y datos ficticios.
+          Los instaladores todavía no poseen firma de código. Windows SmartScreen puede mostrar una advertencia del editor desconocido. Los archivos fueron generados por GitHub Actions y sus huellas se incluyen en `SHA256SUMS.txt`.
           EOF
       - name: Crear o actualizar prerelease
         env:
