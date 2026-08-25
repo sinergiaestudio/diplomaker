@@ -58,6 +58,13 @@
   document.documentElement.dataset.theme = resolvedTheme;
   document.documentElement.dataset.themePreference = themePreference;
 
+  document.title = 'Diplomaker — Diseñá una vez. Emití con precisión.';
+  const favicon = document.querySelector('link[rel~="icon"]') || document.createElement('link');
+  favicon.rel = 'icon';
+  favicon.type = 'image/svg+xml';
+  favicon.href = 'assets/brand/favicon.svg?v=2.2.0-alpha.1';
+  if (!favicon.parentNode) document.head.appendChild(favicon);
+
   if (!document.querySelector('link[data-diplomaker-experience]')) {
     const stylesheet = document.createElement('link');
     stylesheet.rel = 'stylesheet';
