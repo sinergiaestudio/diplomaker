@@ -12,6 +12,7 @@
     "serve": "node tools/server.js",
     "brand:generate": "node tools/generate-brand-assets.js",
     "check": "npm run brand:generate && node tools/static-check.js",
+    "build:web": "npm run check && node tools/build-web.js",
     "build:desktop": "npm run brand:generate && node tools/build-desktop.js",
     "tauri": "tauri",
     "desktop:dev": "tauri dev",
