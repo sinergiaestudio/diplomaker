@@ -1,8 +1,8 @@
 const fs=require('fs'),path=require('path'),root=path.resolve(__dirname,'..');
 const required=[
   'index.html','manifest.webmanifest','version.json','sw.js','package.json',
-  'styles/app.css','styles/experience.css','vendor/jszip.min.js',
-  'src/utils.js','src/csv-reader.js','src/xlsx-reader.js','src/embedded-assets.js','src/templates.js','src/template-studio.js','src/desktop.js','src/experience.js','src/renderer.js','src/pdf-writer.js','src/storage.js','src/app.js',
+  'styles/app.css','styles/experience.css','styles/polish.css','vendor/jszip.min.js',
+  'src/utils.js','src/csv-reader.js','src/xlsx-reader.js','src/embedded-assets.js','src/templates.js','src/template-studio.js','src/desktop.js','src/experience.js','src/polish.js','src/renderer.js','src/pdf-writer.js','src/storage.js','src/app.js',
   'assets/brand/diplomaker-symbol.svg','assets/brand/diplomaker-horizontal.svg','assets/brand/diplomaker-horizontal-dark.svg','assets/brand/diplomaker-monochrome.svg','assets/brand/favicon.svg',
   'assets/templates/clasico.svg','assets/templates/moderno.svg','assets/templates/academico.svg','assets/icons/icon-192.png','assets/icons/icon-512.png',
   'tools/build-desktop.js','src-tauri/Cargo.toml','src-tauri/build.rs','src-tauri/src/lib.rs','src-tauri/src/main.rs','src-tauri/tauri.conf.json','src-tauri/capabilities/default.json',
@@ -18,9 +18,9 @@ walk(root);
 const indexSource=fs.readFileSync(path.join(root,'index.html'),'utf8');
 if(!indexSource.includes('src/template-studio.js')){console.error('El Estudio de plantillas no está enlazado desde index.html.');failed=true;}
 const embeddedAssets=fs.readFileSync(path.join(root,'src/embedded-assets.js'),'utf8');
-for(const asset of ['src/experience.js','src/desktop.js','styles/experience.css']){if(!embeddedAssets.includes(asset)){console.error(`No se carga: ${asset}`);failed=true;}}
+for(const asset of ['src/experience.js','src/desktop.js','src/polish.js','styles/experience.css','styles/polish.css']){if(!embeddedAssets.includes(asset)){console.error(`No se carga: ${asset}`);failed=true;}}
 const serviceWorker=fs.readFileSync(path.join(root,'sw.js'),'utf8');
-for(const asset of ['src/template-studio.js','src/experience.js','src/desktop.js','styles/experience.css','assets/brand/diplomaker-symbol.svg','version.json']){if(!serviceWorker.includes(asset)){console.error(`Falta en caché offline: ${asset}`);failed=true;}}
+for(const asset of ['src/template-studio.js','src/experience.js','src/desktop.js','src/polish.js','styles/experience.css','styles/polish.css','assets/brand/diplomaker-symbol.svg','version.json']){if(!serviceWorker.includes(asset)){console.error(`Falta en caché offline: ${asset}`);failed=true;}}
 const manifest=JSON.parse(fs.readFileSync(path.join(root,'manifest.webmanifest'),'utf8'));
 if(manifest.background_color!=='#f5f7fa'){console.error('El manifiesto no usa el tema claro como fondo predeterminado.');failed=true;}
 const version=JSON.parse(fs.readFileSync(path.join(root,'version.json'),'utf8'));
