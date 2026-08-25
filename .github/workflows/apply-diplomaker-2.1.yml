@@ -1,4 +1,4 @@
-# Publicación solicitada el 24/08/2026
+# Publicación reparada el 25/08/2026
 name: Aplicar Diplomaker 2.1
 
 on:
@@ -32,18 +32,24 @@ jobs:
       - name: Preparar Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "24"
 
       - name: Aplicar paquete 2.1 y verificarlo
         shell: bash
         run: |
           set -euo pipefail
-          cat .github/dm21/part-* > /tmp/diplomaker-2.1.zip.b64
+          cat \
+            .github/dm21/part-00 \
+            .github/dm21/part-01 \
+            .github/dm21/part-02 \
+            .github/dm21/part-03 \
+            .github/dm21/part-04 \
+            .github/dm21/part-05 \
+            | tr -d '\r\n\t ' > /tmp/diplomaker-2.1.zip.b64
           base64 --decode /tmp/diplomaker-2.1.zip.b64 > /tmp/diplomaker-2.1.zip
           echo "7e86c56f74f4b004a148c5b1286f96154a538155000a1e9c4d62a35e3b29852b  /tmp/diplomaker-2.1.zip" | sha256sum --check --strict
           unzip -o /tmp/diplomaker-2.1.zip -d .
           rm -rf .github/dm21
-          rm -f .github/workflows/apply-diplomaker-2.1.yml
           npm run check
 
       - name: Confirmar Diplomaker 2.1 en main
