@@ -65,6 +65,13 @@
     stylesheet.dataset.diplomakerExperience = 'true';
     document.head.appendChild(stylesheet);
   }
+  if (!document.querySelector('link[data-diplomaker-polish]')) {
+    const stylesheet = document.createElement('link');
+    stylesheet.rel = 'stylesheet';
+    stylesheet.href = 'styles/polish.css?v=2.2.0-alpha.1';
+    stylesheet.dataset.diplomakerPolish = 'true';
+    document.head.appendChild(stylesheet);
+  }
 
   function appendScript(src, marker) {
     if (document.querySelector(`script[data-${marker}]`)) return;
@@ -77,4 +84,5 @@
 
   appendScript('src/desktop.js?v=2.2.0-alpha.1', 'diplomakerDesktop');
   appendScript('src/experience.js?v=2.2.0-alpha.1', 'diplomakerExperience');
+  appendScript('src/polish.js?v=2.2.0-alpha.1', 'diplomakerPolish');
 })();
