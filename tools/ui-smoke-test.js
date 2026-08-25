@@ -54,15 +54,18 @@ async function downloadedBytes(download, filename) {
     assert(title.includes('Diseñá una vez'), 'La identidad oficial no se aplicó al título.');
     assert(await page.getAttribute('html', 'data-theme') === 'light', 'La primera apertura no inició en tema claro.');
     assert(await page.locator('.experience-author a').getAttribute('href') === 'https://github.com/sinergiaestudio', 'La autoría no enlaza al perfil público.');
+    await page.waitForTimeout(350);
     await page.screenshot({ path: path.join(OUTPUT, 'home-light.png'), fullPage: true });
 
     log('Validando tema oscuro y automático');
     await page.click('#themeExperienceButton');
     assert(await page.getAttribute('html', 'data-theme') === 'dark', 'El selector no activó el tema oscuro.');
+    await page.waitForTimeout(350);
     await page.screenshot({ path: path.join(OUTPUT, 'home-dark.png'), fullPage: true });
     await page.click('#themeExperienceButton');
     await page.click('#themeExperienceButton');
     assert(await page.getAttribute('html', 'data-theme') === 'light', 'El ciclo de temas no regresó al modo claro.');
+    await page.waitForTimeout(350);
 
     log('Creando certificado individual');
     await page.click('[data-start-mode="individual"]');
@@ -71,6 +74,8 @@ async function downloadedBytes(download, filename) {
     await page.fill('#individualForm input[name="participantName"]', 'Sofía Martínez');
     await page.fill('#individualForm input[name="eventTitle"]', 'Taller de herramientas digitales');
     await page.fill('#individualForm textarea[name="eventText"]', 'En reconocimiento por su participación en la actividad.');
+    await page.fill('#signersEditor input[data-signer-field="name"]', 'Andrea Molina');
+    await page.fill('#signersEditor input[data-signer-field="role"]', 'Coordinadora académica');
     await page.click('#applyIndividualButton');
     await page.waitForSelector('#view-review.active');
     await page.waitForFunction(() => document.querySelector('#certificateCanvas')?.width === 1120);
@@ -95,6 +100,7 @@ async function downloadedBytes(download, filename) {
     ]);
     const zip = await downloadedBytes(zipDownload, 'sample.zip');
     assert(zip.bytes[0] === 0x50 && zip.bytes[1] === 0x4b, 'El ZIP exportado no contiene una cabecera válida.');
+    await page.waitForTimeout(4000);
 
     log('Validando biblioteca de proyectos');
     await page.click('#projectsExperienceButton');
@@ -119,6 +125,7 @@ async function downloadedBytes(download, filename) {
     assert(studioOpened, 'No se encontró un botón visible para abrir el Estudio de Plantillas.');
     await page.waitForSelector('#view-studio.active');
     assert(await page.locator('#studioCanvas').count() === 1, 'El Estudio de Plantillas no abrió su lienzo.');
+    await page.waitForTimeout(350);
     await page.screenshot({ path: path.join(OUTPUT, 'studio.png'), fullPage: true });
 
     log('Validando experiencia móvil');
@@ -129,6 +136,7 @@ async function downloadedBytes(download, filename) {
     const mobileNavDisplay = await page.locator('#mobileBottomNav').evaluate(node => getComputedStyle(node).display);
     assert(sidebarDisplay === 'none', 'La barra lateral de escritorio permanece visible en móvil.');
     assert(mobileNavDisplay === 'grid', 'La navegación inferior móvil no está visible.');
+    await page.waitForTimeout(350);
     await page.screenshot({ path: path.join(OUTPUT, 'mobile-home.png'), fullPage: true });
 
     await page.click('#mobileBottomNav [data-mobile-more]');
