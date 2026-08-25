@@ -1,4 +1,4 @@
-# Publicación reparada el 25/08/2026
+# Publicación reparada el 25/08/2026 · intento definitivo
 name: Aplicar Diplomaker 2.1
 
 on:
@@ -34,20 +34,31 @@ jobs:
         with:
           node-version: "24"
 
-      - name: Aplicar paquete 2.1 y verificarlo
+      - name: Reconstruir, aplicar y verificar Diplomaker 2.1
         shell: bash
         run: |
           set -euo pipefail
-          cat \
-            .github/dm21/part-00 \
-            .github/dm21/part-01 \
-            .github/dm21/part-02 \
-            .github/dm21/part-03 \
-            .github/dm21/part-04 \
-            .github/dm21/part-05 \
-            | tr -d '\r\n\t ' > /tmp/diplomaker-2.1.zip.b64
-          base64 --decode /tmp/diplomaker-2.1.zip.b64 > /tmp/diplomaker-2.1.zip
-          echo "7e86c56f74f4b004a148c5b1286f96154a538155000a1e9c4d62a35e3b29852b  /tmp/diplomaker-2.1.zip" | sha256sum --check --strict
+          python - <<'PY'
+          from pathlib import Path
+          import base64, hashlib
+
+          alphabet = set('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=')
+          def clean(path):
+              text = Path(path).read_text(encoding='utf-8')
+              return ''.join(ch for ch in text if ch in alphabet)
+
+          parts = [clean(f'.github/dm21/part-{i:02d}') for i in range(8)]
+          payload = ''.join(parts[:5]) + parts[5][:7000] + parts[6][:7000] + parts[7][:5872]
+          if len(payload) != 54872:
+              raise SystemExit(f'Longitud Base64 inesperada: {len(payload)}')
+          data = base64.b64decode(payload, validate=True)
+          digest = hashlib.sha256(data).hexdigest()
+          expected = '7e86c56f74f4b004a148c5b1286f96154a538155000a1e9c4d62a35e3b29852b'
+          if digest != expected:
+              raise SystemExit(f'SHA-256 incorrecto: {digest}')
+          Path('/tmp/diplomaker-2.1.zip').write_bytes(data)
+          print(f'Paquete verificado: {len(data)} bytes · {digest}')
+          PY
           unzip -o /tmp/diplomaker-2.1.zip -d .
           rm -rf .github/dm21
           npm run check
