@@ -1,0 +1,75 @@
+name: Generar recursos de marca
+
+on:
+  push:
+    branches: ["release/2.2.0"]
+    paths:
+      - "assets/brand/diplomaker-symbol.svg"
+      - "assets/brand/favicon.svg"
+      - "assets/brand/social-preview.svg"
+      - ".github/workflows/generate-brand-assets.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: diplomaker-brand-assets
+  cancel-in-progress: true
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: release/2.2.0
+          fetch-depth: 0
+
+      - name: Instalar renderizadores SVG
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y librsvg2-bin imagemagick
+
+      - name: Renderizar iconos y portada
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p assets/icons assets/brand src-tauri/icons /tmp/diplomaker-icons
+
+          for size in 16 24 32 48 64 128 192 256 512; do
+            rsvg-convert -w "$size" -h "$size" assets/brand/favicon.svg -o "/tmp/diplomaker-icons/icon-${size}.png"
+          done
+
+          cp /tmp/diplomaker-icons/icon-192.png assets/icons/icon-192.png
+          cp /tmp/diplomaker-icons/icon-512.png assets/icons/icon-512.png
+          cp /tmp/diplomaker-icons/icon-32.png src-tauri/icons/32x32.png
+          cp /tmp/diplomaker-icons/icon-128.png src-tauri/icons/128x128.png
+          cp /tmp/diplomaker-icons/icon-256.png src-tauri/icons/128x128@2x.png
+          cp /tmp/diplomaker-icons/icon-512.png src-tauri/icons/icon.png
+
+          convert \
+            /tmp/diplomaker-icons/icon-16.png \
+            /tmp/diplomaker-icons/icon-24.png \
+            /tmp/diplomaker-icons/icon-32.png \
+            /tmp/diplomaker-icons/icon-48.png \
+            /tmp/diplomaker-icons/icon-64.png \
+            /tmp/diplomaker-icons/icon-128.png \
+            /tmp/diplomaker-icons/icon-256.png \
+            src-tauri/icons/icon.ico
+
+          rsvg-convert -w 1280 -h 640 assets/brand/social-preview.svg -o assets/brand/social-preview.png
+
+      - name: Confirmar recursos generados
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/icons assets/brand/social-preview.png src-tauri/icons
+          if git diff --cached --quiet; then
+            echo "Los recursos ya estaban actualizados."
+          else
+            git commit -m "Generar iconos oficiales de Diplomaker"
+            git push origin HEAD:release/2.2.0
+          fi
