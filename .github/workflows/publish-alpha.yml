@@ -1,0 +1,35 @@
+name: Publicar marcador alpha 2.2
+
+on:
+  push:
+    branches: ["release/2.2.0"]
+    paths: [".github/workflows/publish-alpha.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: diplomaker-alpha-tag
+  cancel-in-progress: false
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: release/2.2.0
+          fetch-depth: 0
+      - name: Crear etiqueta v2.2.0-alpha.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code --tags origin refs/tags/v2.2.0-alpha.1 >/dev/null 2>&1; then
+            echo "La etiqueta v2.2.0-alpha.1 ya existe."
+            exit 0
+          fi
+          git tag -a v2.2.0-alpha.1 -m "Diplomaker 2.2.0 alpha 1"
+          git push origin v2.2.0-alpha.1
