@@ -1,7 +1,7 @@
 (function bootDiplomakerExperience() {
   'use strict';
 
-  const APP_VERSION = '2.2.0-alpha.1';
+  const APP_VERSION = '2.2.0-alpha.2';
   const APP_LABEL = '2.2 · Identidad y proyectos';
   const THEME_KEY = 'diplomaker:theme';
   const UPDATE_DISMISSED_KEY = 'diplomaker:update-dismissed';

@@ -1,7 +1,7 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "Diplomaker",
-  "version": "2.2.0-1",
+  "version": "2.2.0-2",
   "identifier": "ar.com.sinergiaestudio.diplomaker",
   "build": {
     "beforeDevCommand": "npm run serve",
@@ -33,7 +33,10 @@
   },
   "bundle": {
     "active": true,
-    "targets": ["nsis", "msi"],
+    "targets": [
+      "nsis",
+      "msi"
+    ],
     "category": "Productivity",
     "shortDescription": "Estudio local de diplomas y certificados",
     "longDescription": "Diplomaker permite diseñar plantillas, importar planillas y emitir diplomas o certificados individuales y por lote con procesamiento local.",
@@ -49,7 +52,9 @@
     ],
     "fileAssociations": [
       {
-        "ext": ["diplomaker"],
+        "ext": [
+          "diplomaker"
+        ],
         "name": "Proyecto Diplomaker",
         "description": "Proyecto portable de Diplomaker",
         "role": "Editor"

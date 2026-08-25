@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.2.0-alpha.2 — 2026-08-25
+
+- identidad visual oficial aplicada en web y escritorio;
+- iconos y portada social regenerados;
+- tema claro predeterminado y tema oscuro persistente;
+- biblioteca y respaldo de proyectos;
+- persistencia adicional en la edición Windows;
+- mejoras de instalación, actualización y experiencia móvil.
+
 ## 2.2.0-alpha.1 — en desarrollo
 
 ### Identidad

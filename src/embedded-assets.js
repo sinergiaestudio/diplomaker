@@ -62,20 +62,20 @@
   const favicon = document.querySelector('link[rel~="icon"]') || document.createElement('link');
   favicon.rel = 'icon';
   favicon.type = 'image/svg+xml';
-  favicon.href = 'assets/brand/favicon.svg?v=2.2.0-alpha.1';
+  favicon.href = 'assets/brand/favicon.svg?v=2.2.0-alpha.2';
   if (!favicon.parentNode) document.head.appendChild(favicon);
 
   if (!document.querySelector('link[data-diplomaker-experience]')) {
     const stylesheet = document.createElement('link');
     stylesheet.rel = 'stylesheet';
-    stylesheet.href = 'styles/experience.css?v=2.2.0-alpha.1';
+    stylesheet.href = 'styles/experience.css?v=2.2.0-alpha.2';
     stylesheet.dataset.diplomakerExperience = 'true';
     document.head.appendChild(stylesheet);
   }
   if (!document.querySelector('link[data-diplomaker-polish]')) {
     const stylesheet = document.createElement('link');
     stylesheet.rel = 'stylesheet';
-    stylesheet.href = 'styles/polish.css?v=2.2.0-alpha.1';
+    stylesheet.href = 'styles/polish.css?v=2.2.0-alpha.2';
     stylesheet.dataset.diplomakerPolish = 'true';
     document.head.appendChild(stylesheet);
   }
@@ -89,7 +89,7 @@
     document.head.appendChild(script);
   }
 
-  appendScript('src/desktop.js?v=2.2.0-alpha.1', 'diplomakerDesktop');
-  appendScript('src/experience.js?v=2.2.0-alpha.1', 'diplomakerExperience');
-  appendScript('src/polish.js?v=2.2.0-alpha.1', 'diplomakerPolish');
+  appendScript('src/desktop.js?v=2.2.0-alpha.2', 'diplomakerDesktop');
+  appendScript('src/experience.js?v=2.2.0-alpha.2', 'diplomakerExperience');
+  appendScript('src/polish.js?v=2.2.0-alpha.2', 'diplomakerPolish');
 })();

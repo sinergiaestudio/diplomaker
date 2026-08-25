@@ -1,6 +1,6 @@
 {
   "name": "diplomaker",
-  "version": "2.2.0-1",
+  "version": "2.2.0-2",
   "private": false,
   "description": "Estudio local y de código abierto para diseñar y emitir diplomas, certificados y plantillas reutilizables",
   "license": "MIT",

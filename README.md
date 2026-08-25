@@ -19,7 +19,7 @@
 </p>
 
 <p align="center">
-  <img alt="versión" src="https://img.shields.io/badge/versión-2.2.0--alpha.1-365F91">
+  <img alt="versión" src="https://img.shields.io/badge/versión-2.2.0--alpha.2-365F91">
   <img alt="licencia MIT" src="https://img.shields.io/badge/licencia-MIT-B28A46">
   <img alt="offline first" src="https://img.shields.io/badge/offline-first-2F7D5C">
   <img alt="datos locales" src="https://img.shields.io/badge/datos-locales-687386">

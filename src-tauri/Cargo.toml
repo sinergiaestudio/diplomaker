@@ -1,6 +1,6 @@
 [package]
 name = "diplomaker"
-version = "2.2.0-1"
+version = "2.2.0-2"
 description = "Estudio local de diplomas y certificados"
 authors = ["Marcelo Gomez"]
 edition = "2021"

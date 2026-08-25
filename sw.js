@@ -1,4 +1,4 @@
-const VERSION = '2.2.0-alpha.1';
+const VERSION = '2.2.0-alpha.2';
 const CACHE = `diplomaker-app-${VERSION}`;
 const FALLBACK = './index.html';
 const CORE_ASSETS = [
