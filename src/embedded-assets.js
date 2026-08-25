@@ -65,11 +65,16 @@
     stylesheet.dataset.diplomakerExperience = 'true';
     document.head.appendChild(stylesheet);
   }
-  if (!document.querySelector('script[data-diplomaker-experience]')) {
+
+  function appendScript(src, marker) {
+    if (document.querySelector(`script[data-${marker}]`)) return;
     const script = document.createElement('script');
-    script.src = 'src/experience.js?v=2.2.0-alpha.1';
+    script.src = src;
     script.async = false;
-    script.dataset.diplomakerExperience = 'true';
+    script.dataset[marker] = 'true';
     document.head.appendChild(script);
   }
+
+  appendScript('src/desktop.js?v=2.2.0-alpha.1', 'diplomakerDesktop');
+  appendScript('src/experience.js?v=2.2.0-alpha.1', 'diplomakerExperience');
 })();
