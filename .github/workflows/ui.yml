@@ -1,0 +1,71 @@
+name: Pruebas de interfaz
+
+on:
+  push:
+    branches: ["release/2.2.0"]
+    paths:
+      - "index.html"
+      - "manifest.webmanifest"
+      - "sw.js"
+      - "src/**"
+      - "styles/**"
+      - "assets/brand/**"
+      - "assets/templates/**"
+      - "tools/ui-smoke-test.js"
+      - ".github/workflows/ui.yml"
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: diplomaker-ui-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Instalar Playwright
+        run: |
+          npm install --no-save playwright@latest
+          npx playwright install --with-deps chromium
+
+      - name: Iniciar Diplomaker
+        shell: bash
+        run: |
+          node tools/server.js > /tmp/diplomaker-server.log 2>&1 &
+          echo $! > /tmp/diplomaker-server.pid
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:4173/ >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/diplomaker-server.log
+          exit 1
+
+      - name: Ejecutar prueba integral
+        run: node tools/ui-smoke-test.js
+
+      - name: Mostrar servidor en caso de fallo
+        if: failure()
+        run: cat /tmp/diplomaker-server.log || true
+
+      - name: Publicar capturas y resultados
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Diplomaker-UI-${{ github.sha }}
+          path: test-artifacts/
+          if-no-files-found: warn
+          retention-days: 14
