@@ -9,7 +9,9 @@
 </p>
 
 <p align="center">
-  <a href="https://sinergiaestudio.github.io/diplomaker/"><strong>Usar Diplomaker en línea</strong></a>
+  <a href="https://sinergiaestudio.github.io/diplomaker/"><strong>Usar Diplomaker 2.1 estable</strong></a>
+  ·
+  <a href="https://github.com/sinergiaestudio/diplomaker/releases/tag/v2.2.0-alpha.2"><strong>Probar Diplomaker 2.2 alpha</strong></a>
   ·
   <a href="docs/INSTALLATION.md">Instalación</a>
   ·
@@ -37,6 +39,36 @@ Diplomaker reúne en una sola herramienta dos recorridos que suelen estar separa
 La vista previa y los archivos finales utilizan el mismo motor de composición. Los nombres, planillas, logos, firmas, plantillas y proyectos se procesan en el dispositivo del usuario.
 
 > **Tus plantillas. Tus datos. Tus certificados.**
+
+## Vista general
+
+<p align="center">
+  <img src="docs/screenshots/home-light.png" alt="Pantalla inicial de Diplomaker en tema claro" width="920">
+</p>
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/review.png" alt="Revisión de un certificado"></td>
+    <td width="50%"><img src="docs/screenshots/template-studio.png" alt="Estudio visual de plantillas"></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/projects.png" alt="Biblioteca local de proyectos"></td>
+    <td width="50%"><img src="docs/screenshots/mobile.png" alt="Diplomaker en un teléfono"></td>
+  </tr>
+</table>
+
+<details>
+  <summary><strong>Ver tema oscuro y menú móvil</strong></summary>
+  <br>
+  <table>
+    <tr>
+      <td width="72%"><img src="docs/screenshots/home-dark.png" alt="Pantalla inicial en tema oscuro"></td>
+      <td width="28%"><img src="docs/screenshots/mobile-more.png" alt="Menú Más en un teléfono"></td>
+    </tr>
+  </table>
+</details>
+
+Las capturas anteriores fueron producidas por la [prueba integral automatizada](docs/screenshots/ui-results.json), que también verifica creación, previsualización, PDF, ZIP, proyectos, temas, Estudio de Plantillas y navegación móvil.
 
 ## Funciones principales
 
@@ -141,11 +173,19 @@ Consulte la [política de privacidad](PRIVACY.md) y el [aviso sobre recursos de 
 
 ### Web y PWA
 
-Abra [Diplomaker en GitHub Pages](https://sinergiaestudio.github.io/diplomaker/). En navegadores compatibles aparecerá el botón **Instalar**. También puede usarse desde el menú del navegador.
+La versión pública estable continúa disponible en [GitHub Pages](https://sinergiaestudio.github.io/diplomaker/) mientras se valida la edición 2.2. En navegadores compatibles aparece el botón **Instalar** y la aplicación puede seguir utilizándose sin conexión después de la primera carga.
 
-### Windows
+### Windows y versión 2.2 alpha
 
-La edición de escritorio se compila con Tauri y genera instaladores NSIS y MSI. Durante la fase alpha, los paquetes se publican como artefactos de prueba; las versiones estables aparecerán en GitHub Releases.
+La [publicación de prueba 2.2.0-alpha.2](https://github.com/sinergiaestudio/diplomaker/releases/tag/v2.2.0-alpha.2) incluye:
+
+- instalador Windows NSIS (`Setup.exe`);
+- instalador Windows MSI;
+- ejecutable portable para Windows x64;
+- paquete web portable;
+- archivo `SHA256SUMS.txt` para verificar la integridad.
+
+Los instaladores alpha todavía no poseen firma de código. Windows SmartScreen puede mostrar una advertencia de editor desconocido; las huellas publicadas permiten comprobar que los archivos corresponden a la compilación generada por GitHub Actions.
 
 Lea [Instalación y actualización](docs/INSTALLATION.md) y [Diplomaker Desktop](docs/DESKTOP.md).
 
