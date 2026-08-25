@@ -74,6 +74,7 @@ async function downloadedBytes(download, filename) {
     await page.click('#applyIndividualButton');
     await page.waitForSelector('#view-review.active');
     await page.waitForFunction(() => document.querySelector('#certificateCanvas')?.width === 1120);
+    await page.waitForFunction(() => document.querySelector('#autosaveStatus')?.textContent.includes('Guardado'));
     assert((await page.locator('#previewRecordName').textContent()).includes('Sofía Martínez'), 'La revisión no mostró el participante creado.');
     await page.screenshot({ path: path.join(OUTPUT, 'review.png'), fullPage: true });
 
@@ -98,6 +99,7 @@ async function downloadedBytes(download, filename) {
     log('Validando biblioteca de proyectos');
     await page.click('#projectsExperienceButton');
     await page.waitForFunction(() => document.querySelector('#projectLibraryDialog')?.open === true);
+    await page.waitForSelector('#projectLibraryList .project-card');
     assert(await page.locator('#projectLibraryList .project-card').count() >= 1, 'La biblioteca no recuperó el proyecto guardado.');
     await page.screenshot({ path: path.join(OUTPUT, 'projects.png'), fullPage: true });
     await page.locator('#projectLibraryDialog [data-experience-close]').click();
