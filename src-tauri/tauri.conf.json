@@ -1,0 +1,53 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Diplomaker",
+  "version": "2.2.0-alpha.1",
+  "identifier": "ar.com.sinergiaestudio.diplomaker",
+  "build": {
+    "beforeDevCommand": "npm run serve",
+    "devUrl": "http://127.0.0.1:4173",
+    "beforeBuildCommand": "npm run build:desktop",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "label": "main",
+        "title": "Diplomaker — Diseñá una vez. Emití con precisión.",
+        "width": 1440,
+        "height": 900,
+        "minWidth": 960,
+        "minHeight": 680,
+        "center": true,
+        "resizable": true,
+        "fullscreen": false,
+        "maximized": false,
+        "visible": true,
+        "focus": true
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis", "msi"],
+    "category": "Productivity",
+    "shortDescription": "Estudio local de diplomas y certificados",
+    "longDescription": "Diplomaker permite diseñar plantillas, importar planillas y emitir diplomas o certificados individuales y por lote con procesamiento local.",
+    "publisher": "Marcelo Gómez",
+    "copyright": "© 2026 Marcelo Gómez",
+    "createUpdaterArtifacts": false,
+    "windows": {
+      "webviewInstallMode": {
+        "type": "downloadBootstrapper",
+        "silent": true
+      },
+      "nsis": {
+        "installMode": "currentUser"
+      }
+    }
+  }
+}
