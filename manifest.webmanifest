@@ -1,1 +1,24 @@
-{"name":"Diplomaker — Creador de diplomas y certificados","short_name":"Diplomaker","description":"Aplicación local y de código abierto para crear diplomas y certificados individuales o por lote.","start_url":"./index.html","scope":"./","display":"standalone","background_color":"#07111f","theme_color":"#0d1b2a","lang":"es-AR","icons":[{"src":"assets/icons/icon-192.png","sizes":"192x192","type":"image/png"},{"src":"assets/icons/icon-512.png","sizes":"512x512","type":"image/png"}]}
+{
+  "id": "./",
+  "name": "Diplomaker — Estudio local de diplomas y certificados",
+  "short_name": "Diplomaker",
+  "description": "Diseñá plantillas reutilizables y emití diplomas o certificados individuales y por lote, con procesamiento local y funcionamiento offline.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#f5f7fa",
+  "theme_color": "#f5f7fa",
+  "lang": "es-AR",
+  "categories": ["productivity", "education", "business", "utilities"],
+  "icons": [
+    {"src": "assets/brand/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"},
+    {"src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+    {"src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ],
+  "shortcuts": [
+    {"name": "Crear certificado", "short_name": "Crear", "url": "./index.html#crear", "icons": [{"src": "assets/icons/icon-192.png", "sizes": "192x192"}]},
+    {"name": "Diseñar plantilla", "short_name": "Diseñar", "url": "./index.html#disenar", "icons": [{"src": "assets/icons/icon-192.png", "sizes": "192x192"}]}
+  ]
+}

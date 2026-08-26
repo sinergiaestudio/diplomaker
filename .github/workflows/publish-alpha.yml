@@ -1,0 +1,180 @@
+name: Publicar Diplomaker 2.2 alpha 2
+
+on:
+  push:
+    branches: ["release/2.2.0"]
+    paths: [".github/workflows/publish-alpha.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: diplomaker-alpha-release
+  cancel-in-progress: false
+
+env:
+  TAG_NAME: v2.2.0-alpha.2
+  DISPLAY_VERSION: 2.2.0-alpha.2
+
+jobs:
+  tag:
+    name: Etiqueta de versión
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: release/2.2.0
+          fetch-depth: 0
+      - name: Crear etiqueta si no existe
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code --tags origin "refs/tags/$TAG_NAME" >/dev/null 2>&1; then
+            echo "La etiqueta $TAG_NAME ya existe."
+          else
+            git tag -a "$TAG_NAME" -m "Diplomaker $DISPLAY_VERSION"
+            git push origin "$TAG_NAME"
+          fi
+
+  web:
+    name: Web portable
+    needs: tag
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG_NAME }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Verificar y preparar paquete web
+        run: npm run build:web
+      - name: Empaquetar versión portable
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd dist-web
+          zip -9 -r "../Diplomaker-${DISPLAY_VERSION}-Web-Portable.zip" .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Diplomaker-Web-Portable
+          path: Diplomaker-${{ env.DISPLAY_VERSION }}-Web-Portable.zip
+          if-no-files-found: error
+          retention-days: 14
+
+  windows:
+    name: Windows x64
+    needs: tag
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG_NAME }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "src-tauri -> target"
+      - name: Instalar Tauri CLI
+        run: npm install --ignore-scripts
+      - name: Verificar y compilar NSIS y MSI
+        run: |
+          npm run check
+          npm run desktop:build -- --bundles nsis,msi
+      - name: Normalizar nombres de distribución
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          New-Item -ItemType Directory -Force -Path release-assets | Out-Null
+          Copy-Item 'src-tauri/target/release/diplomaker.exe' "release-assets/Diplomaker-$env:DISPLAY_VERSION-Windows-x64-Portable.exe"
+          $nsis = Get-ChildItem 'src-tauri/target/release/bundle/nsis' -Filter '*.exe' | Select-Object -First 1
+          $msi = Get-ChildItem 'src-tauri/target/release/bundle/msi' -Filter '*.msi' | Select-Object -First 1
+          if (-not $nsis -or -not $msi) { throw 'No se encontraron ambos instaladores.' }
+          Copy-Item $nsis.FullName "release-assets/Diplomaker-$env:DISPLAY_VERSION-Windows-x64-Setup.exe"
+          Copy-Item $msi.FullName "release-assets/Diplomaker-$env:DISPLAY_VERSION-Windows-x64.msi"
+          Get-ChildItem release-assets | Format-Table Name, Length
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Diplomaker-Windows-x64
+          path: release-assets/*
+          if-no-files-found: error
+          retention-days: 14
+
+  release:
+    name: GitHub prerelease
+    needs: [web, windows]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: downloaded
+      - name: Preparar archivos y verificaciones
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p final
+          find downloaded -type f -print0 | while IFS= read -r -d '' file; do
+            cp "$file" "final/$(basename "$file")"
+          done
+          (cd final && sha256sum * > SHA256SUMS.txt)
+          ls -lah final
+      - name: Redactar notas de la versión
+        shell: bash
+        run: |
+          cat > release-notes.md <<'EOF'
+          # Diplomaker 2.2 alpha 2
+
+          Versión de prueba actualizada de **Diplomaker 2.2 — Identidad, experiencia y escritorio**.
+
+          ## Cambios principales
+
+          - logo, favicon, iconos PWA, iconos Windows y portada social oficiales;
+          - tema claro predeterminado, tema oscuro y modo automático persistente;
+          - nueva portada editorial y autoría visible de Marcelo Gómez con vínculo a GitHub;
+          - navegación móvil inferior y menú “Más”;
+          - biblioteca de proyectos con renombrado, duplicado, respaldo y restauración;
+          - solicitud de almacenamiento persistente y actualización explícita sin borrar proyectos;
+          - aplicación de escritorio para Windows mediante Tauri;
+          - réplica automática y atómica de proyectos en `Documentos/Diplomaker/Proyectos`;
+          - instaladores NSIS y MSI, ejecutable portable y paquete web portable;
+          - verificaciones estáticas, de privacidad, identidad, PDF, ZIP y experiencia responsive.
+
+          ## Verificaciones realizadas
+
+          - generación y revisión de certificados individuales;
+          - exportación de PDF y ZIP identificados por participante;
+          - funcionamiento del Estudio de Plantillas;
+          - temas claro, oscuro y automático;
+          - biblioteca y reapertura de proyectos;
+          - navegación móvil;
+          - compilación de NSIS, MSI y ejecutable portable;
+          - ausencia de referencias institucionales privadas en la edición pública.
+
+          ## Estado
+
+          Esta edición es **alpha**. Está destinada a validación final en Windows y dispositivos móviles antes de reemplazar la versión pública estable 2.1.
+
+          Los instaladores todavía no poseen firma de código. Windows SmartScreen puede mostrar una advertencia del editor desconocido. Los archivos fueron generados por GitHub Actions y sus huellas se incluyen en `SHA256SUMS.txt`.
+          EOF
+      - name: Crear o actualizar prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if gh release view "$TAG_NAME" >/dev/null 2>&1; then
+            gh release edit "$TAG_NAME" --title "Diplomaker $DISPLAY_VERSION" --notes-file release-notes.md --prerelease
+            gh release upload "$TAG_NAME" final/* --clobber
+          else
+            gh release create "$TAG_NAME" final/* \
+              --title "Diplomaker $DISPLAY_VERSION" \
+              --notes-file release-notes.md \
+              --prerelease
+          fi
